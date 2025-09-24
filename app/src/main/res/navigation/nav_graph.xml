@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/splashScreenFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.SplashScreenFragment"
+        android:label="fragment_splash_screen"
+        tools:layout="@layout/fragment_splash_screen"
+        >
+        <action
+            android:id="@+id/action_splashScreenFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectedFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.SelectedFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_selected" />
+    <fragment
+        android:id="@+id/cabinetFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.CabinetFragment"
+        android:label="fragment_cabinet"
+        tools:layout="@layout/fragment_cabinet" />
+    <fragment
+        android:id="@+id/otherFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.OtherFragment"
+        android:label="fragment_other"
+        tools:layout="@layout/fragment_other" />
+    <fragment
+        android:id="@+id/newAnnouncementFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.BrandListFragment"
+        android:label="fragment_new_announcement"
+        tools:layout="@layout/fragment_brand_list"
+        >
+        <action
+            android:id="@+id/action_newAnnouncementFragment_to_newAnnouncementFragment2"
+            app:destination="@id/newAnnouncementFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/newAnnouncementFragment2"
+        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment2"
+        android:label="fragment_new_announcement2"
+        tools:layout="@layout/fragment_new_announcement2" />
+    <fragment
+        android:id="@+id/newAnnouncementFragment3"
+        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment3"
+        android:label="fragment_new_announcement3"
+        tools:layout="@layout/fragment_new_announcement3" />
+    <fragment
+        android:id="@+id/newAnnouncementFragment4"
+        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment4"
+        android:label="fragment_new_announcement4"
+        tools:layout="@layout/fragment_new_announcement4" />
+    <fragment
+        android:id="@+id/newAnnouncementFragment5"
+        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment5"
+        android:label="fragment_new_announcement5"
+        tools:layout="@layout/fragment_new_announcement5" />
+    <fragment
+        android:id="@+id/newAnnouncementFragment6"
+        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment6"
+        android:label="fragment_new_announcement6"
+        tools:layout="@layout/fragment_new_announcement6" />
+    <fragment
+        android:id="@+id/newAnnouncementFragment7"
+        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment7"
+        android:label="fragment_new_announcement7"
+        tools:layout="@layout/fragment_new_announcement7" />
+    <fragment
+        android:id="@+id/newAnnouncementFragment8"
+        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment8"
+        android:label="fragment_new_announcement8"
+        tools:layout="@layout/fragment_new_announcement8" />
+    <fragment
+        android:id="@+id/newAnnouncementFragment9"
+        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment9"
+        android:label="fragment_new_announcement9"
+        tools:layout="@layout/fragment_new_announcement9" />
+    <fragment
+        android:id="@+id/addListingHostFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.AddListingHostFragment"
+        android:label="fragment_add_listing_host"
+        tools:layout="@layout/fragment_add_listing_host" />
+    <fragment
+        android:id="@+id/modelListFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.ModelListFragment"
+        android:label="fragment_model_list"
+        tools:layout="@layout/fragment_model_list" />
+</navigation>

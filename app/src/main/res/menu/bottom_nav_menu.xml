@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:title="@string/Əsas"
+        android:icon="@drawable/icons8_home"/>
+    <item
+        android:id="@+id/selectedFragment"
+        android:title="@string/Seçilmişlər"
+        android:icon="@drawable/heart_svgrepo_com"/>
+    <item
+        android:id="@+id/newAnnouncementFragment"
+        android:title="Yeni Elan"
+        android:icon="@drawable/baseline_arrow_drop_down_24"/>
+    <item
+        android:id="@+id/cabinetFragment"
+        android:title="@string/Kabinet"
+        android:icon="@drawable/account_circle"/>
+    <item
+        android:id="@+id/otherFragment"
+        android:title="Daha Çox"
+        android:icon="@drawable/daha_cox"/>
+</menu>

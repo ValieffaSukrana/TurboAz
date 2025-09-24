@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="rectangle">
+
+        <!-- Çərçivə qalınlığı və rəngi -->
+        <stroke
+            android:width="2dp"
+            android:color="#2B70A6" /> <!-- burda rəngi dəyişə bilərsən -->
+
+        <!-- Künclərin radiusu -->
+        <corners android:radius="8dp" />
+
+        <!-- Arxa fon -->
+        <solid android:color="#FFFFFF" /> <!-- iç rəngi -->
+    </shape>

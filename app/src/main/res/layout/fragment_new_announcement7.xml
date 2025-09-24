@@ -1,0 +1,225 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="24dp"
+    android:background="@android:color/white">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="4dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+
+            <ImageView
+                android:id="@+id/cancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/cancel"
+                android:contentDescription="Back"
+                android:padding="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back"
+                android:contentDescription="Back"
+                android:padding="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <!-- Başlıq mərkəzdə -->
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BMW"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/subtitleText"/>
+
+            <!-- Alt başlıq -->
+            <TextView
+                android:id="@+id/subtitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="16-dan addım 7"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@id/titleText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/BazarText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintStart_toStartOf="@id/btnAmerika"
+        android:text="Hansı bazar üçün yığılıb"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+
+
+
+        <Button
+            android:id="@+id/btnAmerika"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Amerika"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/black"
+            android:layout_margin="12dp"
+            app:layout_constraintTop_toBottomOf="@id/BazarText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnAvropa"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <Button
+            android:id="@+id/btnAvropa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Avropa"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/black"
+            android:layout_margin="12dp"
+            app:layout_constraintTop_toBottomOf="@id/BazarText"
+            app:layout_constraintStart_toEndOf="@id/btnAmerika"
+            app:layout_constraintEnd_toStartOf="@+id/btnDiger"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <Button
+            android:id="@+id/btnDiger"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Digər"
+            android:layout_margin="12dp"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/BazarText"
+            app:layout_constraintStart_toEndOf="@id/btnAvropa"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <!-- İkinci sıra -->
+        <Button
+            android:id="@+id/btnDubay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Dubay"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/black"
+            android:layout_margin="12dp"
+            app:layout_constraintTop_toBottomOf="@id/btnAmerika"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnKoreya"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <Button
+            android:id="@+id/btnKoreya"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Koreya"
+            android:layout_margin="12dp"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/btnAvropa"
+            app:layout_constraintStart_toEndOf="@id/btnDubay"
+            app:layout_constraintEnd_toStartOf="@+id/btnRusiya"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <Button
+            android:id="@+id/btnRusiya"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Rusiya"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/black"
+            android:layout_margin="12dp"
+            app:layout_constraintTop_toBottomOf="@id/btnDiger"
+            app:layout_constraintStart_toEndOf="@id/btnKoreya"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <!-- Üçüncü sıra -->
+        <Button
+            android:id="@+id/btnResmiDiler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Rəsmi diler"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/black"
+            android:layout_margin="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/btnYaponiya"
+            app:layout_constraintTop_toBottomOf="@id/btnDubay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnYaponiya"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <Button
+            android:id="@+id/btnYaponiya"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Yaponiya"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/black"
+            android:layout_margin="12dp"
+            app:layout_constraintTop_toBottomOf="@id/btnKoreya"
+            app:layout_constraintStart_toEndOf="@id/btnResmiDiler"
+            app:layout_constraintEnd_toStartOf="@+id/btnCin"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <Button
+            android:id="@+id/btnCin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Çin"
+            android:layout_margin="12dp"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/btnRusiya"
+            app:layout_constraintStart_toEndOf="@id/btnYaponiya"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDavamEt"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Davam et"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:layout_margin="16dp"
+        android:paddingVertical="10dp"
+        app:cornerRadius="12dp"
+        app:backgroundTint="@color/dark_blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+

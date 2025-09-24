@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Turbo.az</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Home\n</string>
+    <string name="Əsas">Əsas\n</string>
+    <string name="Seçilmişlər">Seçilmişlər\n</string>
+    <string name="Kabinet">Kabinet</string>
+    <string name="myString">Şəkillərin tam göründüyündən əmin olun: <b> ön faralar, arxa işıqlar və ön panel.</b></string>
+    <string name="myString2"> Qadağandır! <b> Skrinşotlar, çərçivəli şəkillər və ekran şəkilləri</b></string>
+</resources>
