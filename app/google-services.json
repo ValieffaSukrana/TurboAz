@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "77012629035",
+    "project_id": "turboaz-53798",
+    "storage_bucket": "turboaz-53798.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77012629035:android:3141973009b026678edc6e",
+        "android_client_info": {
+          "package_name": "com.example.turboazapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAq5whT47bWUscl6c50D5zW5fNzm6Bo_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
