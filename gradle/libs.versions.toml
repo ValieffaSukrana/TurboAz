@@ -16,6 +16,7 @@ firebaseBom = "33.13.0"
 [libraries]
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.16.0" }
 
+
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore"}
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }

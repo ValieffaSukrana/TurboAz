@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.gms.services)
     alias(libs.plugins.kapt)
     alias(libs.plugins.ksp)
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -56,8 +57,8 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-    implementation ("com.google.android.material:material:1.12.0")
-    implementation ("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.androidx.core.ktx)

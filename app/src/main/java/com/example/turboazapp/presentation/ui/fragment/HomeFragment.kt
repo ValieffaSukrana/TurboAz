@@ -7,18 +7,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.turboazapp.presentation.ui.adapter.HomeAdapter
 import com.example.turboazapp.R
 import com.example.turboazapp.databinding.FragmentHomeBinding
 import com.example.turboazapp.presentation.ui.model.ImageList
+import com.example.turboazapp.presentation.viewmodel.CarsViewModel
 import com.google.android.material.chip.Chip
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     lateinit var adapter: HomeAdapter
+    private val viewModel: CarsViewModel by viewModels()
 
     override fun onResume() {
         super.onResume()
@@ -37,6 +42,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.image1.setOnClickListener {
+            viewModel.seedDummyCars(
+                onDone = {
+                    Toast.makeText(requireContext(), "Seed OK", Toast.LENGTH_SHORT).show()
+                },
+                onError = { e ->
+                    Toast.makeText(requireContext(), e.message ?: "Xəta", Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
         val list = listOf(
             ImageList(
                 R.drawable.byd,

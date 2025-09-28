@@ -60,6 +60,7 @@
 
         <ImageView
             android:id="@+id/image1"
+            android:clickable="true"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="110dp"
