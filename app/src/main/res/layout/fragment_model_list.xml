@@ -61,7 +61,7 @@
                 android:id="@+id/subtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="16-dan addım 2"
+                android:text="@string/_16_dan_add_m_2"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray"
                 app:layout_constraintTop_toBottomOf="@id/titleText"
@@ -78,7 +78,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:layout_constraintStart_toStartOf="@id/searchEditText"
-        android:text="Model"
+        android:text="@string/model"
         android:textSize="30sp"
         android:textStyle="bold"/>
 
@@ -87,7 +87,7 @@
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Axtar"
+        android:hint="@string/axtar"
         android:drawableStart="@android:drawable/ic_menu_search"
         android:padding="10dp"
         android:background="@android:drawable/editbox_background"

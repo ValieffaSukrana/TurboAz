@@ -3,11 +3,11 @@
 
     <item
         android:id="@+id/homeFragment"
-        android:title="@string/Əsas"
+        android:title="@string/esas"
         android:icon="@drawable/icons8_home"/>
     <item
         android:id="@+id/selectedFragment"
-        android:title="@string/Seçilmişlər"
+        android:title="@string/secilmishler"
         android:icon="@drawable/heart_svgrepo_com"/>
     <item
         android:id="@+id/newAnnouncementFragment"
@@ -15,7 +15,7 @@
         android:icon="@drawable/baseline_arrow_drop_down_24"/>
     <item
         android:id="@+id/cabinetFragment"
-        android:title="@string/Kabinet"
+        android:title="@string/kabinet"
         android:icon="@drawable/account_circle"/>
     <item
         android:id="@+id/otherFragment"

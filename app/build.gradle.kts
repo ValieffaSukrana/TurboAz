@@ -43,6 +43,11 @@ android {
 }
 
 dependencies {
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+
     implementation(libs.glide)
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
     implementation("com.google.dagger:hilt-android:2.56.2")

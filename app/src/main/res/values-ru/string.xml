@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Turbo.az</string>
+    <string name="change_language">Azərbaycanca</string>
+    <string name="hello_blank_fragment">Привет пустой фрагмент</string>
+    <string name="home">Главная</string>
+    <string name="esas">Основная</string>
+    <string name="secilmishler">Избранное</string>
+    <string name="kabinet">Профиль</string>
+    <string name="myString">Убедитесь, что изображения полностью видны: <b>передние фары, задние фонари и передняя панель.</b></string>
+    <string name="myString2">Запрещено! <b>Скриншоты, рамочные изображения и снимки экрана</b></string>
+    <string name="language">Язык</string>
+    <string name="yeni_elan">Новое объявление</string>
+    <string name="_16_dan_add_m_1">Шаг 1 из 16</string>
+    <string name="marka_axtar">Поиск марки</string>
+    <string name="xsi_kabinet">Личный кабинет</string>
+    <string name="biz_turbo_az_da_sizin_m_lumatlar_n_z_n_t_hl_k_sizliyi_bar_d_d_n_r_k_davam_etm_k_n_z_n_mr_nizi_t_sdiq_edin">
+        На Turbo.az мы заботимся о безопасности ваших данных. Чтобы продолжить, подтвердите свой номер.
+    </string>
+    <string name="telefon_n_mr_si">Номер телефона</string>
+    <string name="sms_kod_g_nd_rilsin">Отправить SMS-код</string>
+    <string name="_16_dan_add_m_2">Шаг 2 из 16</string>
+    <string name="model">Модель</string>
+    <string name="axtar">Искать</string>
+    <string name="bmw">BMW</string>
+    <string name="_16_dan_add_m_3">Шаг 3 из 16</string>
+    <string name="_16_dan_add_m_33">Шаг 3 из 16</string>
+    <string name="avtokataloq">Автокаталог</string>
+    <string name="dilerl_r">Дилеры</string>
+    <string name="t_rtibat_rejimi">Режим разработки</string>
+    <string name="daha_ox">Больше</string>
+    <string name="t_tbiq_haqq_nda">О приложении</string>
+    <string name="biziml_laq">Связаться с нами</string>
+    <string name="k_m_k_edin">Помощь</string>
+</resources>

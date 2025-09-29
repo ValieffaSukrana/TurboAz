@@ -1,11 +1,32 @@
 <resources>
     <string name="app_name">Turbo.az</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="home">Home\n</string>
-    <string name="Əsas">Əsas\n</string>
-    <string name="Seçilmişlər">Seçilmişlər\n</string>
-    <string name="Kabinet">Kabinet</string>
-    <string name="myString">Şəkillərin tam göründüyündən əmin olun: <b> ön faralar, arxa işıqlar və ön panel.</b></string>
-    <string name="myString2"> Qadağandır! <b> Skrinşotlar, çərçivəli şəkillər və ekran şəkilləri</b></string>
+    <string name="change_language">По-русски</string>
+    <string name="hello_blank_fragment">Salam boş fragment</string>
+    <string name="home">Ev</string>
+    <string name="esas">Əsas</string>
+    <string name="secilmishler">Seçilmişlər</string>
+    <string name="kabinet">Kabinet</string>
+    <string name="myString">Şəkillərin tam göründüyündən əmin olun: <b>ön faralar, arxa işıqlar və ön panel.</b></string>
+    <string name="myString2">Qadağandır! <b>Skrinşotlar, çərçivəli şəkillər və ekran şəkilləri</b></string>
+    <string name="language">Dil</string>
+    <string name="yeni_elan">Yeni elan</string>
+    <string name="_16_dan_add_m_1">16-dan addım 1</string>
+    <string name="marka_axtar">Marka axtar</string>
+    <string name="xsi_kabinet">Şəxsi Kabinet</string>
+    <string name="biz_turbo_az_da_sizin_m_lumatlar_n_z_n_t_hl_k_sizliyi_bar_d_d_n_r_k_davam_etm_k_n_z_n_mr_nizi_t_sdiq_edin">Biz Turbo.az-da sizin məlumatlarınızın təhlükəsizliyi barədə düşünürük. Davam etmək üçün öz nömrənizi təsdiq edin.</string>
+    <string name="telefon_n_mr_si">Telefon nömrəsi</string>
+    <string name="sms_kod_g_nd_rilsin">SMS-kod göndərilsin</string>
+    <string name="_16_dan_add_m_2">16-dan addım 2</string>
+    <string name="model">Model</string>
+    <string name="axtar">Axtar</string>
+    <string name="bmw">BMW</string>
+    <string name="_16_dan_add_m_3">16-dan addım 3\n</string>
+    <string name="_16_dan_add_m_33">16-dan addım 3</string>
+    <string name="avtokataloq">Avtokataloq</string>
+    <string name="dilerl_r">Dilerlər</string>
+    <string name="t_rtibat_rejimi">Tərtibat rejimi</string>
+    <string name="daha_ox">Daha çox</string>
+    <string name="t_tbiq_haqq_nda">Tətbiq haqqında</string>
+    <string name="biziml_laq">Bizimlə əlaqə</string>
+    <string name="k_m_k_edin">Kömək edin</string>
 </resources>

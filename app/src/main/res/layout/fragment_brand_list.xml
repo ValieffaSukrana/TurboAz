@@ -30,12 +30,12 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <!-- Başlıq mərkəzdə -->
+
             <TextView
                 android:id="@+id/titleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Yeni elan"
+                android:text="@string/yeni_elan"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
@@ -44,12 +44,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/subtitleText"/>
 
-            <!-- Alt başlıq -->
             <TextView
                 android:id="@+id/subtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="16-dan addım 1"
+                android:text="@string/_16_dan_add_m_1"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray"
                 app:layout_constraintTop_toBottomOf="@id/titleText"
@@ -62,12 +61,11 @@
 
 
 
-    <!-- Axtarış qutusu -->
     <EditText
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Marka axtar"
+        android:hint="@string/marka_axtar"
         android:drawableStart="@android:drawable/ic_menu_search"
         android:padding="10dp"
         android:background="@android:drawable/editbox_background"
@@ -76,7 +74,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="12dp"/>
 
-    <!-- Brendlərin siyahısı -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewBrands"
         android:layout_width="0dp"

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="16dp"
-        android:text="Daha çox"
+        android:text="@string/daha_ox"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Tərtibat rejimi"
+                    android:text="@string/t_rtibat_rejimi"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -63,6 +63,7 @@
 
 
             <LinearLayout
+                android:id="@+id/changeLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -77,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="По-русски"
+                    android:text="@string/change_language"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -99,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Dilerlər"
+                    android:text="@string/dilerl_r"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -116,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Avtokataloq"
+                    android:text="@string/avtokataloq"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -138,7 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Kömək edin"
+                    android:text="@string/k_m_k_edin"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -154,7 +155,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Bizimlə əlaqə"
+                    android:text="@string/biziml_laq"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -170,7 +171,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Tətbiq haqqında"
+                    android:text="@string/t_tbiq_haqq_nda"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
