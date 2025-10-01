@@ -1,11 +1,13 @@
 package com.example.turboazapp.presentation.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.turboazapp.databinding.FragmentOtherBinding
 import com.example.turboazapp.presentation.ui.LanguageHelper
 
@@ -13,6 +15,12 @@ class OtherFragment : Fragment() {
 
     private var _binding: FragmentOtherBinding? = null
     private val binding get() = _binding!!
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).setToolbarVisible(false)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +41,32 @@ class OtherFragment : Fragment() {
             LanguageHelper.setAppLocale(requireContext(), newLang)
             Log.d("LANG_TEST", "Current language: $currentLang, New language: $newLang")
             requireActivity().recreate()
+        }
+
+        // Dark Mode toggle
+        binding.darkModeLayout.setOnClickListener {
+            val currentStatus = getDarkModeStatus()
+            val newStatus = !currentStatus
+            saveDarkModeStatus(newStatus)
+            applyDarkMode(newStatus)
+        }
+    }
+
+    private fun getDarkModeStatus(): Boolean {
+        val sharedPref = requireActivity().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        return sharedPref.getBoolean("dark_mode", false)
+    }
+
+    private fun saveDarkModeStatus(enabled: Boolean) {
+        val sharedPref = requireActivity().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        sharedPref.edit().putBoolean("dark_mode", enabled).apply()
+    }
+
+    private fun applyDarkMode(enabled: Boolean) {
+        if (enabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 

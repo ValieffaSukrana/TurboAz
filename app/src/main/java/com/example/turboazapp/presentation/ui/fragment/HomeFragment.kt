@@ -15,10 +15,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.turboazapp.R
 import com.example.turboazapp.data.di.RetrofitModule
+import com.example.turboazapp.data.mapper.MakeImageMapper
 import com.example.turboazapp.databinding.FragmentHomeBinding
-import com.example.turboazapp.domain.model.Make
 import com.example.turboazapp.presentation.ui.adapter.HomeAdapter
-import com.example.turboazapp.presentation.ui.model.ImageList
+import com.example.turboazapp.presentation.ui.model.MakeWithImage
 import com.example.turboazapp.presentation.viewmodel.CarsViewModel
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    lateinit var adapter: HomeAdapter
+    private lateinit var adapter: HomeAdapter
     private val viewModel: CarsViewModel by viewModels()
 
     override fun onResume() {
@@ -59,17 +59,8 @@ class HomeFragment : Fragment() {
             )
         }
 
-        // RecyclerView image list
-        val list = listOf(
-            ImageList(R.drawable.byd, "Nümunə"),
-            ImageList(R.drawable.e39, "Nümunə"),
-            ImageList(R.drawable.porsche, "Nümunə"),
-            ImageList(R.drawable.zl1, "Nümunə"),
-            ImageList(R.drawable.cruze, "Nümunə"),
-            ImageList(R.drawable.brabus, "Nümunə"),
-            ImageList(R.drawable.benz, "Nümunə")
-        )
-        adapter = HomeAdapter(list)
+        // RecyclerView setup - boş başlatırıq, API-dən data gələndə dolacaq
+        adapter = HomeAdapter()
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerView.adapter = adapter
 
@@ -132,19 +123,30 @@ class HomeFragment : Fragment() {
     private fun fetchCarMakes() {
         lifecycleScope.launch {
             try {
-                val response = RetrofitModule.api.getMakes() // callback göndərmə
+                val response = RetrofitModule.api.getMakes()
                 if (response.isSuccessful) {
-                    val makes: List<Make>? = response.body()?.Makes
-                    makes?.forEach {
-                        Log.d("CarMake", it.make_display)
-                    }
+                    val makes = response.body()?.Makes
+
+                    // API-dən gələn markaları MakeWithImage modelinə çevir
+                    val makeList = makes?.map { make ->
+                        MakeWithImage(
+                            name = make.make_display,
+                            imageRes = MakeImageMapper.getImageForMake(make.make_display)
+                        )
+                    } ?: emptyList()
+
+                    // RecyclerView-ı yenilə
+                    adapter.updateList(makeList)
+
+                    Log.d("CarMake", "Total makes loaded: ${makeList.size}")
                 } else {
                     Log.e("API_ERROR", response.errorBody()?.string() ?: "Unknown error")
+                    Toast.makeText(requireContext(), "API xətası", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Log.e("API_EXCEPTION", e.message ?: "Exception")
+                Toast.makeText(requireContext(), "Şəbəkə xətası: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
 }

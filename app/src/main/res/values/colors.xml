@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Mövcud rənglər -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#c81016</color>
@@ -12,4 +13,9 @@
     <color name="darkGray">#9296a4</color>
     <color name="carGray">#c2cce5</color>
     <color name="sekilBlue">#4d89f5</color>
+
+    <!-- Dark Mode üçün yeni rənglər -->
+    <color name="background_dark">#121212</color>
+    <color name="surface_dark">#1E1E1E</color>
+    <color name="on_surface_dark">#E0E0E0</color>
 </resources>

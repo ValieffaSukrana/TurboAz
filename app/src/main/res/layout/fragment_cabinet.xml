@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:padding="12dp"
     android:layout_marginTop="24dp"
+    android:background="?attr/colorSurface"
     tools:context=".presentation.ui.fragment.CabinetFragment">
 
 
@@ -16,7 +17,7 @@
         android:drawableEnd="@drawable/settings"
         android:gravity="center"
         android:text="@string/xsi_kabinet"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,13 +30,15 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/cabinetText"
         app:layout_constraintStart_toStartOf="parent"
+        app:tint="?attr/colorOnSurface"
         android:src="@drawable/cancel"/>
+
     <TextView
         android:id="@+id/cabinetText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/biz_turbo_az_da_sizin_m_lumatlar_n_z_n_t_hl_k_sizliyi_bar_d_d_n_r_k_davam_etm_k_n_z_n_mr_nizi_t_sdiq_edin"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_border"
+            android:textColor="?attr/colorOnSurface"
             android:inputType="phone" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -77,6 +81,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/phoneNumber" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

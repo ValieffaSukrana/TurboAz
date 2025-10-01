@@ -5,20 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="24dp"
+    android:background="?attr/colorSurface"
     tools:context=".presentation.ui.fragment.SelectedFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/secilmislerAdi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/secilmishler"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipCategoryInSelected"
@@ -34,10 +33,10 @@
         android:id="@+id/SelectedRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="?attr/colorSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chipCategoryInSelected" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

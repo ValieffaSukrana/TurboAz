@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     tools:context=".presentation.ui.fragment.MainActivity">
 
 
@@ -12,7 +13,7 @@
         android:id="@+id/topAppBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="?attr/colorSurface"
         app:title="TURBO.AZ"
         app:titleTextColor="@color/red"
         app:titleTextAppearance="@style/ToolbarTitleBold"
@@ -39,7 +40,7 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/nav_item_color"
@@ -57,19 +58,10 @@
         android:src="@drawable/plus48"
         app:tint="@android:color/white"
         app:backgroundTint="@color/red"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="60dp"
         app:maxImageSize="40dp"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-
-
-
-
