@@ -23,6 +23,19 @@
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent" />
 
+        <ImageView
+            android:id="@+id/favoriteIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/empty_heart"
+            android:padding="6dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_margin="8dp"
+            card_view:layout_constraintTop_toTopOf="@id/carImageView"
+            card_view:layout_constraintEnd_toEndOf="@id/carImageView"
+            card_view:tint="@color/white" />
+
         <TextView
             android:id="@+id/SelectedItemText"
             android:layout_width="0dp"

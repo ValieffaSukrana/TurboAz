@@ -17,6 +17,7 @@ import com.example.turboazapp.R
 import com.example.turboazapp.data.di.RetrofitModule
 import com.example.turboazapp.data.mapper.MakeImageMapper
 import com.example.turboazapp.databinding.FragmentHomeBinding
+import com.example.turboazapp.domain.model.Car
 import com.example.turboazapp.presentation.ui.adapter.HomeAdapter
 import com.example.turboazapp.presentation.ui.model.MakeWithImage
 import com.example.turboazapp.presentation.viewmodel.CarsViewModel
@@ -54,6 +55,7 @@ class HomeFragment : Fragment() {
                     Toast.makeText(requireContext(), "Seed OK", Toast.LENGTH_SHORT).show()
                 },
                 onError = { e ->
+
                     Toast.makeText(requireContext(), e.message ?: "Xəta", Toast.LENGTH_SHORT).show()
                 }
             )
@@ -129,13 +131,14 @@ class HomeFragment : Fragment() {
 
                     // API-dən gələn markaları MakeWithImage modelinə çevir
                     val makeList = makes?.map { make ->
-                        MakeWithImage(
-                            name = make.make_display,
-                            imageRes = MakeImageMapper.getImageForMake(make.make_display)
+                        Car(
+                            id = make.make_id.toString(),
+                            brand = make.make_display,
+                            model = "",
+                            url = "", // şəkil url yoxdursa boş qoy
                         )
                     } ?: emptyList()
 
-                    // RecyclerView-ı yenilə
                     adapter.updateList(makeList)
 
                     Log.d("CarMake", "Total makes loaded: ${makeList.size}")
