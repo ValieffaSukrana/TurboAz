@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.turboazapp.R
 import com.example.turboazapp.databinding.FragmentSelectedBinding
 import com.example.turboazapp.presentation.ui.adapter.SelectedAdapter
-import com.example.turboazapp.presentation.viewmodel.FavoriteViewModel
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,7 +21,6 @@ import kotlinx.coroutines.launch
 class SelectedFragment : Fragment() {
     private var binding: FragmentSelectedBinding? = null
     private lateinit var adapter: SelectedAdapter
-    private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     override fun onResume() {
         super.onResume()
@@ -43,7 +41,6 @@ class SelectedFragment : Fragment() {
 
         setupChips(binding)
         setupRecyclerView(binding)
-        observeViewModel()
     }
 
     private fun setupChips(binding: FragmentSelectedBinding) {
@@ -72,30 +69,7 @@ class SelectedFragment : Fragment() {
         binding.SelectedRecyclerView.adapter = adapter
     }
 
-    private fun observeViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            favoriteViewModel.favorites.collect { favorites ->
-                adapter.submitList(favorites)
 
-                if (favorites.isEmpty()) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Heç bir seçilmiş elan yoxdur",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            favoriteViewModel.error.collect { error ->
-                error?.let {
-                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                    favoriteViewModel.clearError()
-                }
-            }
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

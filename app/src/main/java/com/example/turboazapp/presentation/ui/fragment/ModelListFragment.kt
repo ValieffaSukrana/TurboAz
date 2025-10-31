@@ -26,15 +26,6 @@ class ModelListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        val host = requireParentFragment() as AddListingHostFragment
-        val brand = host.getSelectedBrand() ?: return
-        val binding = FragmentModelListBinding.bind(view)
-        binding.recyclerViewModels.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewModels.adapter = CarsModelAdapter(brand.models) { model ->
-            val model = brand.models.first { it.name == model.name }
-            host.onModelSelected(model)
-        }
     }
 
 

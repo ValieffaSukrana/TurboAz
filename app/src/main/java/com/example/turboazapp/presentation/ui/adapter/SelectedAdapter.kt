@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.turboazapp.R
 import com.example.turboazapp.databinding.ItemSelectedRcycleBinding
-import com.example.turboazapp.domain.model.FavoriteCar
 
 class SelectedAdapter : ListAdapter<FavoriteCar, SelectedAdapter.ViewHolder>(DiffCallback()) {
 
