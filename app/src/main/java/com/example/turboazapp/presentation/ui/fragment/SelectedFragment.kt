@@ -72,9 +72,9 @@ class SelectedFragment : Fragment() {
 //
 //
 //
-        override fun onDestroyView() {
-            super.onDestroyView()
-            binding = null
-        }
+//        override fun onDestroyView() {
+//            super.onDestroyView()
+//            binding = null
+//        }
     }
     }
