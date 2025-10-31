@@ -13,30 +13,30 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase,
-    private val registerUseCase: RegisterUseCase
+//    private val loginUseCase: LoginUseCase,
+//    private val registerUseCase: RegisterUseCase
 ) : ViewModel() {
 
-    private val _authState = MutableStateFlow<Resource<User>?>(null)
-    val authState: StateFlow<Resource<User>?> = _authState.asStateFlow()
-
-    fun login(email: String, password: String) {
-        viewModelScope.launch {
-            _authState.value = Resource.Loading()
-            val result = loginUseCase(email, password)
-            _authState.value = result
-        }
-    }
-
-    fun register(email: String, password: String, name: String, phone: String) {
-        viewModelScope.launch {
-            _authState.value = Resource.Loading()
-            val result = registerUseCase(email, password, name, phone)
-            _authState.value = result
-        }
-    }
-
-    fun resetState() {
-        _authState.value = null
-    }
+//    private val _authState = MutableStateFlow<Resource<User>?>(null)
+//    val authState: StateFlow<Resource<User>?> = _authState.asStateFlow()
+//
+//    fun login(email: String, password: String) {
+//        viewModelScope.launch {
+//            _authState.value = Resource.Loading()
+//            val result = loginUseCase(email, password)
+//            _authState.value = result
+//        }
+//    }
+//
+//    fun register(email: String, password: String, name: String, phone: String) {
+//        viewModelScope.launch {
+//            _authState.value = Resource.Loading()
+//            val result = registerUseCase(email, password, name, phone)
+//            _authState.value = result
+//        }
+//    }
+//
+//    fun resetState() {
+//        _authState.value = null
+//    }
 }

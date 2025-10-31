@@ -34,12 +34,12 @@ class HomeAdapter(
             // Maşın adı
             itemText.text = "${car.brand} ${car.model}"
 
-            // Şəkil yüklə
-            Glide.with(root.context)
-                .load(car.url)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_foreground)
-                .into(carImageView)
+//            // Şəkil yüklə
+//            Glide.with(root.context)
+//                .load(car.url)
+//                .placeholder(R.drawable.ic_launcher_background)
+//                .error(R.drawable.ic_launcher_foreground)
+//                .into(carImageView)
 
             // Favorite state
             val isFavorite = favoriteItems.contains(car.id)
