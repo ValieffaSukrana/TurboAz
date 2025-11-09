@@ -8,7 +8,26 @@
         android:id="@+id/homeFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_carDetailsFragment"
+            app:destination="@id/carDetailsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/carDetailsFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.CarDetailsFragment"
+        android:label="Avtomobil">
+
+        <argument
+            android:name="carId"
+            app:argType="string" />
+    </fragment>
+
     <fragment
         android:id="@+id/splashScreenFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.SplashScreenFragment"
@@ -28,7 +47,11 @@
         android:id="@+id/cabinetFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.CabinetFragment"
         android:label="fragment_cabinet"
-        tools:layout="@layout/fragment_cabinet" />
+        tools:layout="@layout/fragment_cabinet" >
+        <action
+            android:id="@+id/action_cabinetFragment_to_verifyCodeFragment"
+            app:destination="@id/verifyCodeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/otherFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.OtherFragment"
@@ -94,4 +117,14 @@
         android:name="com.example.turboazapp.presentation.ui.fragment.ModelListFragment"
         android:label="fragment_model_list"
         tools:layout="@layout/fragment_model_list" />
+    <fragment
+        android:id="@+id/verifyCodeFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.VerifyCodeFragment"
+        android:label="fragment_verify_code"
+        tools:layout="@layout/fragment_verify_code" />
+    <fragment
+        android:id="@+id/mainCabinetFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.MainCabinetFragment"
+        android:label="fragment_main_cabinet"
+        tools:layout="@layout/fragment_main_cabinet" />
 </navigation>

@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-
 class FirebaseCarDataSource @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
@@ -20,16 +19,19 @@ class FirebaseCarDataSource @Inject constructor(
     fun getCars(): Flow<List<CarDto>> = callbackFlow {
         val listener = carsCollection
             .whereEqualTo("status", "ACTIVE")
-            .orderBy("created_at", Query.Direction.DESCENDING)
+            // .orderBy("created_at", Query.Direction.DESCENDING)  // ← Index lazımdır, comment edirik
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     close(error)
                     return@addSnapshotListener
                 }
 
-                val cars = snapshot?.documents?.mapNotNull {
+                var cars = snapshot?.documents?.mapNotNull {
                     it.toObject(CarDto::class.java)?.copy(id = it.id)
                 } ?: emptyList()
+
+                // Client-side sort (index lazım olmur)
+                cars = cars.sortedByDescending { it.createdAt }
 
                 trySend(cars)
             }
@@ -86,29 +88,16 @@ class FirebaseCarDataSource @Inject constructor(
             query = query.whereEqualTo("is_new", it)
         }
 
-        // Year filter
-        filter.minYear?.let {
-            query = query.whereGreaterThanOrEqualTo("year", it)
-        }
-        filter.maxYear?.let {
-            query = query.whereLessThanOrEqualTo("year", it)
-        }
+        // Year filter (bir neçə condition varsa index lazımdır, ona görə client-side edirik)
+        // filter.minYear?.let {
+        //     query = query.whereGreaterThanOrEqualTo("year", it)
+        // }
+        // filter.maxYear?.let {
+        //     query = query.whereLessThanOrEqualTo("year", it)
+        // }
 
-        // Sorting
-        query = when (filter.sortBy) {
-            com.example.turboazapp.domain.model.SortOption.DATE_DESC ->
-                query.orderBy("created_at", Query.Direction.DESCENDING)
-            com.example.turboazapp.domain.model.SortOption.DATE_ASC ->
-                query.orderBy("created_at", Query.Direction.ASCENDING)
-            com.example.turboazapp.domain.model.SortOption.PRICE_ASC ->
-                query.orderBy("price", Query.Direction.ASCENDING)
-            com.example.turboazapp.domain.model.SortOption.PRICE_DESC ->
-                query.orderBy("price", Query.Direction.DESCENDING)
-            com.example.turboazapp.domain.model.SortOption.MILEAGE_ASC ->
-                query.orderBy("mileage", Query.Direction.ASCENDING)
-            com.example.turboazapp.domain.model.SortOption.YEAR_DESC ->
-                query.orderBy("year", Query.Direction.DESCENDING)
-        }
+        // Sorting - HEÇ BİR orderBy istifadə etmirik (index problemi olmasın)
+        // query = when (filter.sortBy) { ... }
 
         val listener = query.addSnapshotListener { snapshot, error ->
             if (error != null) {
@@ -133,8 +122,30 @@ class FirebaseCarDataSource @Inject constructor(
             filter.maxMileage?.let { maxMileage ->
                 cars = cars.filter { it.mileage <= maxMileage }
             }
+            filter.minYear?.let { minYear ->
+                cars = cars.filter { it.year >= minYear }
+            }
+            filter.maxYear?.let { maxYear ->
+                cars = cars.filter { it.year <= maxYear }
+            }
             filter.color?.let { color ->
                 cars = cars.filter { it.color == color }
+            }
+
+            // Client-side sorting
+            cars = when (filter.sortBy) {
+                com.example.turboazapp.domain.model.SortOption.DATE_DESC ->
+                    cars.sortedByDescending { it.createdAt }
+                com.example.turboazapp.domain.model.SortOption.DATE_ASC ->
+                    cars.sortedBy { it.createdAt }
+                com.example.turboazapp.domain.model.SortOption.PRICE_ASC ->
+                    cars.sortedBy { it.price }
+                com.example.turboazapp.domain.model.SortOption.PRICE_DESC ->
+                    cars.sortedByDescending { it.price }
+                com.example.turboazapp.domain.model.SortOption.MILEAGE_ASC ->
+                    cars.sortedBy { it.mileage }
+                com.example.turboazapp.domain.model.SortOption.YEAR_DESC ->
+                    cars.sortedByDescending { it.year }
             }
 
             trySend(cars)

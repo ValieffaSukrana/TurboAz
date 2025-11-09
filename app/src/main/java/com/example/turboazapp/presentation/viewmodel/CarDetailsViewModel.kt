@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turboazapp.domain.model.Car
 import com.example.turboazapp.domain.usecase.GetCarDetailsUseCase
+import com.example.turboazapp.domain.usecase.GetCurrentUserUseCase
 import com.example.turboazapp.domain.usecase.IncrementViewCountUseCase
 import com.example.turboazapp.domain.usecase.ToggleFavoriteUseCase
 import com.example.turboazapp.util.Resource
@@ -20,6 +21,7 @@ class CarDetailsViewModel @Inject constructor(
     private val getCarDetailsUseCase: GetCarDetailsUseCase,
     private val incrementViewCountUseCase: IncrementViewCountUseCase,
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -50,11 +52,26 @@ class CarDetailsViewModel @Inject constructor(
         }
     }
 
-    fun toggleFavorite(userId: String, isFavorite: Boolean) {
+    fun toggleFavorite(isFavorite: Boolean) {
         viewModelScope.launch {
-            _favoriteState.value = Resource.Loading()
-            val result = toggleFavoriteUseCase(userId, carId, isFavorite)
-            _favoriteState.value = result
+            val userResult = getCurrentUserUseCase()
+
+            when (userResult) {
+                is Resource.Success -> {
+                    val userId = userResult.data?.id
+                    if (userId != null) {
+                        _favoriteState.value = Resource.Loading()
+                        val result = toggleFavoriteUseCase(userId, carId, isFavorite)
+                        _favoriteState.value = result
+                    } else {
+                        _favoriteState.value = Resource.Error("Giriş edin")
+                    }
+                }
+                is Resource.Error -> {
+                    _favoriteState.value = Resource.Error("Giriş edin")
+                }
+                else -> {}
+            }
         }
     }
 }
