@@ -68,6 +68,10 @@ class OtherFragment : Fragment() {
         binding.logoutLayout.setOnClickListener {
             showLogoutDialog()
         }
+        binding.aboutAppLayout.setOnClickListener {
+            findNavController().navigate(R.id.aboutAppFragment)
+        }
+
     }
 
     private fun showLanguageDialog() {
@@ -221,12 +225,14 @@ class OtherFragment : Fragment() {
     }
 
     private fun getDarkModeStatus(): Boolean {
-        val sharedPref = requireActivity().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        val sharedPref =
+            requireActivity().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
         return sharedPref.getBoolean("dark_mode", false)
     }
 
     private fun saveDarkModeStatus(enabled: Boolean) {
-        val sharedPref = requireActivity().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        val sharedPref =
+            requireActivity().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
         sharedPref.edit().putBoolean("dark_mode", enabled).apply()
     }
 
