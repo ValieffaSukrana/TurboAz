@@ -43,7 +43,6 @@ class CarDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Hide bottom navigation
         (requireActivity() as MainActivity).setToolbarVisible(false)
         (requireActivity() as MainActivity).setBottomNavVisible(false)
 
@@ -56,10 +55,20 @@ class CarDetailsFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+
+
         binding.favoriteButton.setOnClickListener {
             val currentCar = (viewModel.carState.value as? Resource.Success)?.data
             currentCar?.let { car ->
                 viewModel.toggleFavorite(car.isFavorite)
+            }
+        }
+
+        // ✅ Share button
+        binding.shareButton.setOnClickListener {
+            val currentCar = (viewModel.carState.value as? Resource.Success)?.data
+            currentCar?.let { car ->
+                shareCarToWhatsApp(car)
             }
         }
 
@@ -130,14 +139,9 @@ class CarDetailsFragment : Fragment() {
 
     private fun bindCarData(car: Car) {
         binding.apply {
-            // Title
             carTitle.text = "${car.brand} ${car.model}"
             collapsingToolbar.title = "${car.brand} ${car.model}"
-
-            // Price
             carPrice.text = "${car.price.toInt().toString().replace(Regex("(\\d)(?=(\\d{3})+$)"), "$1,")} ${car.currency}"
-
-            // Basic info
             carYear.text = car.year.toString()
             carMileage.text = "${car.mileage.toString().replace(Regex("(\\d)(?=(\\d{3})+$)"), "$1,")} km"
             carColor.text = car.color
@@ -145,18 +149,11 @@ class CarDetailsFragment : Fragment() {
             carTransmission.text = car.transmission
             carEngineVolume.text = "${car.engineVolume} L"
             carCity.text = car.city
-
-            // Description
             carDescription.text = car.description
-
-            // Seller info
             sellerName.text = car.sellerName
             sellerPhone.text = car.phone
 
-            // Images
             setupImagePager(car.images)
-
-            // Favorite button
             updateFavoriteButton(car.isFavorite)
         }
     }
@@ -165,7 +162,6 @@ class CarDetailsFragment : Fragment() {
         imagePagerAdapter = ImagePagerAdapter(images)
         binding.imageViewPager.adapter = imagePagerAdapter
 
-        // Image counter
         binding.imageCounter.text = "1 / ${images.size}"
 
         binding.imageViewPager.registerOnPageChangeCallback(
@@ -182,6 +178,59 @@ class CarDetailsFragment : Fragment() {
             binding.favoriteButton.setImageResource(R.drawable.filled_heart)
         } else {
             binding.favoriteButton.setImageResource(R.drawable.empty_heart)
+        }
+    }
+
+    // ✅ WhatsApp-a paylaşma funksiyası
+    private fun shareCarToWhatsApp(car: Car) {
+        val formattedPrice = car.price.toInt().toString().replace(Regex("(\\d)(?=(\\d{3})+$)"), "$1,")
+        val formattedMileage = car.mileage.toString().replace(Regex("(\\d)(?=(\\d{3})+$)"), "$1,")
+
+        val message = buildString {
+            append("🚗 *${car.brand} ${car.model}*\n\n")
+            append("💰 *Qiymət:* $formattedPrice ${car.currency}\n")
+            append("📅 *İl:* ${car.year}\n")
+            append("🛣️ *Yürüş:* $formattedMileage km\n")
+            append("🎨 *Rəng:* ${car.color}\n")
+            append("⛽ *Yanacaq:* ${car.fuelType}\n")
+            append("⚙️ *Transmissiya:* ${car.transmission}\n")
+            append("🔧 *Mühərrik:* ${car.engineVolume} L\n")
+            append("📍 *Şəhər:* ${car.city}\n\n")
+            append("📝 *Təsvir:*\n${car.description}\n\n")
+            append("📞 *Əlaqə:* ${car.phone}\n\n")
+            append("Turbo.az vasitəsilə paylaşılıb 🚙")
+        }
+
+        try {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                setPackage("com.whatsapp") // WhatsApp-a məcburi göndər
+                putExtra(Intent.EXTRA_TEXT, message)
+            }
+            startActivity(intent)
+
+            android.util.Log.d("CarDetailsFragment", "WhatsApp paylaşma açıldı")
+        } catch (e: Exception) {
+            // Əgər WhatsApp yüklü deyilsə, ümumi paylaşma
+            android.util.Log.e("CarDetailsFragment", "WhatsApp xətası, ümumi paylaşma açılır", e)
+            shareCarGeneric(message)
+        }
+    }
+
+    // ✅ Ümumi paylaşma (WhatsApp yoxdursa)
+    private fun shareCarGeneric(message: String) {
+        try {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, message)
+            }
+            startActivity(Intent.createChooser(intent, "Paylaş"))
+        } catch (e: Exception) {
+            Toast.makeText(
+                requireContext(),
+                "Paylaşma mümkün olmadı",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
