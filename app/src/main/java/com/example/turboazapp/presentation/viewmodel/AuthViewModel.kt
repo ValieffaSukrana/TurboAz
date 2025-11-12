@@ -32,7 +32,9 @@ class AuthViewModel @Inject constructor(
     private val _authState = MutableStateFlow<Resource<User>?>(null)
     val authState: StateFlow<Resource<User>?> = _authState.asStateFlow()
 
-    private var verificationId: String? = null
+    // ✅ PUBLIC et ki Fragment-dən oxuna bilsin
+    var verificationId: String? = null
+        private set
 
     fun sendVerificationCode(phoneNumber: String, activity: Activity) {
         _verificationState.value = VerificationState.Loading
@@ -81,6 +83,22 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             _authState.value = Resource.Loading()
             val result = verifyCodeAndLoginUseCase(verifyId, code, name)
+
+            android.util.Log.d("AuthViewModel", "Result: $result")
+
+            _authState.value = result
+        }
+    }
+
+    // Mövcud verifyCode metodu saxla, yeni metod əlavə et:
+    fun verifyCodeWithId(verificationId: String, code: String, name: String? = null) {
+        android.util.Log.d("AuthViewModel", "verifyCodeWithId çağırıldı")
+        android.util.Log.d("AuthViewModel", "VerificationId: $verificationId")
+        android.util.Log.d("AuthViewModel", "Code: $code")
+
+        viewModelScope.launch {
+            _authState.value = Resource.Loading()
+            val result = verifyCodeAndLoginUseCase(verificationId, code, name)
 
             android.util.Log.d("AuthViewModel", "Result: $result")
 

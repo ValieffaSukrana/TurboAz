@@ -68,7 +68,8 @@ class VerifyCodeFragment : Fragment() {
 
     private fun setupUI() {
         // Telefon nömrəsini format et və göstər
-        binding.tvDescription.text = "${formatPhoneNumber(phoneNumber)} nömrəsinə SMS-kod göndərildi"
+        binding.tvDescription.text =
+            "${formatPhoneNumber(phoneNumber)} nömrəsinə SMS-kod göndərildi"
 
         // Auto-focus və kod daxil edilməsi
         binding.etSmsCode.addTextChangedListener { text ->
@@ -89,7 +90,12 @@ class VerifyCodeFragment : Fragment() {
         val cleaned = phone.replace("+994", "").trim()
         val formatted = if (cleaned.length == 9) {
             val numberWithZero = "0$cleaned"
-            "(${numberWithZero.substring(0, 3)}) ${numberWithZero.substring(3, 6)}-${numberWithZero.substring(6, 8)}-${numberWithZero.substring(8)}"
+            "(${numberWithZero.substring(0, 3)}) ${
+                numberWithZero.substring(
+                    3,
+                    6
+                )
+            }-${numberWithZero.substring(6, 8)}-${numberWithZero.substring(8)}"
         } else {
             phone
         }
@@ -118,11 +124,28 @@ class VerifyCodeFragment : Fragment() {
     private fun verifyCode(code: String) {
         hideKeyboard()
 
-        // ✅ Debug log əlavə et
-        android.util.Log.d("VerifyCode", "Verifying code: $code")
-        android.util.Log.d("VerifyCode", "VerificationId: $verificationId")
+        android.util.Log.d("VerifyCode", "=== VERIFY ===")
+        android.util.Log.d("VerifyCode", "Code: $code")
+        android.util.Log.d("VerifyCode", "Fragment VerificationId: $verificationId")
+        android.util.Log.d("VerifyCode", "ViewModel VerificationId: ${viewModel.verificationId}")
 
-        viewModel.verifyCode(code)
+        // ✅ Əgər Fragment-dəki ID varsa, onu göndər
+        if (verificationId.isNotEmpty()) {
+            viewModel.verifyCodeWithId(verificationId, code)
+        }
+        // ✅ Yoxdursa ViewModel-dəkini istifadə et
+        else if (viewModel.verificationId != null) {
+            viewModel.verifyCode(code)
+        }
+        // ❌ Heç biri yoxdursa xəta
+        else {
+            Toast.makeText(
+                requireContext(),
+                "Xəta: Doğrulama ID-si tapılmadı",
+                Toast.LENGTH_LONG
+            ).show()
+            findNavController().navigateUp()
+        }
     }
 
     private fun resendCode() {
@@ -157,7 +180,6 @@ class VerifyCodeFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        // Auth state observe - OTP təsdiqi
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authState.collect { resource ->
@@ -176,7 +198,6 @@ class VerifyCodeFragment : Fragment() {
                                     Toast.LENGTH_SHORT
                                 ).show()
 
-                                // MainCabinetFragment-ə keç
                                 navigateToMainCabinet()
                             }
                         }
@@ -200,13 +221,20 @@ class VerifyCodeFragment : Fragment() {
             }
         }
 
-        // Verification state observe - yeni kod göndəriləndə
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.verificationState.collect { state ->
                     when (state) {
                         is VerificationState.CodeSent -> {
-                            verificationId = state.verificationId
+                            android.util.Log.d(
+                                "VerifyCode",
+                                "NEW VerificationId: ${state.verificationId}"
+                            )
+                            android.util.Log.d(
+                                "VerifyCode",
+                                "ViewModel VerificationId: ${viewModel.verificationId}"
+                            )
+
                             Toast.makeText(
                                 requireContext(),
                                 "Yeni kod göndərildi",

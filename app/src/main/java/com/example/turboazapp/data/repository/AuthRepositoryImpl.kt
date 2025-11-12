@@ -28,9 +28,12 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun logout(): Resource<Unit> {
         return try {
+            android.util.Log.d("AuthRepositoryImpl", "Logout başladı")
             authDataSource.logout()
+            android.util.Log.d("AuthRepositoryImpl", "Logout tamamlandı")
             Resource.Success(Unit)
         } catch (e: Exception) {
+            android.util.Log.e("AuthRepositoryImpl", "Logout xətası", e)
             Resource.Error(e.message ?: "Çıxış uğursuz oldu")
         }
     }

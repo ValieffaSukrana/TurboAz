@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/carDetailsFragment"
-        android:name="com.example.turboazapp.presentation.details.CarDetailsFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.CarDetailsFragment"
         android:label="Avtomobil"
         tools:layout="@layout/fragment_car_details">
         <argument

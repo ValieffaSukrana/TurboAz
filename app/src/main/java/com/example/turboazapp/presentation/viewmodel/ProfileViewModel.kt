@@ -56,10 +56,16 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun logout() {
+        android.util.Log.d("ProfileViewModel", "===== LOGOUT BAŞLADI =====")
         viewModelScope.launch {
             _logoutState.value = Resource.Loading()
+            android.util.Log.d("ProfileViewModel", "Logout Loading state set")
+
             val result = logoutUseCase()
+
+            android.util.Log.d("ProfileViewModel", "Logout result: $result")
             _logoutState.value = result
+            android.util.Log.d("ProfileViewModel", "===== LOGOUT TAMAMLANDI =====")
         }
     }
 

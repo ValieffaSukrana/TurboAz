@@ -176,4 +176,17 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton("Xeyr", null)
             .show()
     }
+    override fun onResume() {
+        super.onResume()
+
+        // ✅ Logout sonrası yoxlama
+        val currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+
+        if (currentUser == null) {
+            android.util.Log.d("MainActivity", "⚠️ İstifadəçi logout edib")
+            // Restart olandan sonra SplashFragment avtomatik login səhifəsinə göndərəcək
+        } else {
+            android.util.Log.d("MainActivity", "✅ İstifadəçi login olub: ${currentUser.phoneNumber}")
+        }
+    }
 }
