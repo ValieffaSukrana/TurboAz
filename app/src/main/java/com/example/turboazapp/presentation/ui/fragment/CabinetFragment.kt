@@ -11,16 +11,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.turboazapp.R
 import com.example.turboazapp.databinding.FragmentCabinetBinding
 import com.example.turboazapp.presentation.ui.fragment.MainActivity
 import com.example.turboazapp.presentation.viewmodel.AuthViewModel
 import com.example.turboazapp.presentation.viewmodel.VerificationState
-import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class CabinetFragment : Fragment() {
@@ -42,8 +41,8 @@ class CabinetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Hide bottom navigation
         (requireActivity() as? MainActivity)?.setBottomNavVisible(false)
+        (requireActivity() as MainActivity).setToolbarVisible(false)
 
         setupUI()
         setupClickListeners()
@@ -71,6 +70,8 @@ class CabinetFragment : Fragment() {
             binding.phoneNumber.editText?.setText("+994")
             binding.phoneNumber.editText?.setSelection(4)
         }
+
+        binding.myButton.isEnabled = false
     }
 
     private fun setupClickListeners() {
@@ -94,7 +95,6 @@ class CabinetFragment : Fragment() {
     }
 
     private fun sendVerificationCode(phoneNumber: String) {
-        // Loading göstər
         binding.myButton.isEnabled = false
         binding.myButton.text = "Göndərilir..."
 
@@ -126,7 +126,7 @@ class CabinetFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            // Verify ekranına keç
+                            // VerifyCodeFragment-ə keç
                             navigateToVerifyCode(
                                 state.verificationId,
                                 binding.phoneNumber.editText?.text.toString()
@@ -134,16 +134,13 @@ class CabinetFragment : Fragment() {
                         }
 
                         is VerificationState.AutoVerified -> {
-                            // Avtomatik təsdiqləndi (bəzi hallarda)
                             Toast.makeText(
                                 requireContext(),
                                 "Avtomatik təsdiqləndi",
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            // Auto-verification halı üçün (nadir hallarda işləyir)
-                            // Direkt home-a keç
-                            navigateToHome()
+                            navigateToMainCabinet()
                         }
 
                         is VerificationState.Error -> {
@@ -169,31 +166,28 @@ class CabinetFragment : Fragment() {
     }
 
     private fun navigateToVerifyCode(verificationId: String, phoneNumber: String) {
-        try {
-            val action = CabinetFragmentDirections.actionCabinetFragmentToVerifyCodeFragment(
-                verificationId = verificationId,
-                phoneNumber = phoneNumber
-            )
-            findNavController().navigate(action)
-        } catch (e: Exception) {
-            // Əgər Safe Args istifadə etmirsənsə
-            val bundle = Bundle().apply {
-                putString("verificationId", verificationId)
-                putString("phoneNumber", phoneNumber)
-            }
-            findNavController().navigate(
-                R.id.action_cabinetFragment_to_verifyCodeFragment,
-                bundle
-            )
+        val bundle = Bundle().apply {
+            putString("verificationId", verificationId)
+            putString("phoneNumber", phoneNumber)
         }
+        findNavController().navigate(
+            R.id.action_cabinetFragment_to_verifyCodeFragment,
+            bundle
+        )
     }
 
-    private fun navigateToHome() {
-        findNavController().navigate(R.id.homeFragment) {
-            popUpTo(R.id.cabinetFragment) { inclusive = true }
-        }
-    }
+    private fun navigateToMainCabinet() {
+        val navOptions = NavOptions.Builder()
+            .setPopUpTo(R.id.cabinetFragment, true)
+            .build()
 
+        findNavController().navigate(
+            R.id.action_cabinetFragment_to_mainCabinetFragment,
+            null,
+            navOptions
+        )
+
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         (requireActivity() as? MainActivity)?.setBottomNavVisible(true)

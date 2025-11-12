@@ -69,6 +69,10 @@ class AuthViewModel @Inject constructor(
 
     fun verifyCode(code: String, name: String? = null) {
         val verifyId = verificationId
+
+        android.util.Log.d("AuthViewModel", "VerificationId: $verifyId")
+        android.util.Log.d("AuthViewModel", "Code: $code")
+
         if (verifyId == null) {
             _authState.value = Resource.Error("Verification ID tapılmadı")
             return
@@ -77,6 +81,9 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             _authState.value = Resource.Loading()
             val result = verifyCodeAndLoginUseCase(verifyId, code, name)
+
+            android.util.Log.d("AuthViewModel", "Result: $result")
+
             _authState.value = result
         }
     }

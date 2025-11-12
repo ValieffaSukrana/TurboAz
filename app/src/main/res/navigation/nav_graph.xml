@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_carDetailsFragment"
             app:destination="@id/carDetailsFragment"
@@ -20,9 +21,9 @@
 
     <fragment
         android:id="@+id/carDetailsFragment"
-        android:name="com.example.turboazapp.presentation.ui.fragment.CarDetailsFragment"
-        android:label="Avtomobil">
-
+        android:name="com.example.turboazapp.presentation.details.CarDetailsFragment"
+        android:label="Avtomobil"
+        tools:layout="@layout/fragment_car_details">
         <argument
             android:name="carId"
             app:argType="string" />
@@ -32,99 +33,149 @@
         android:id="@+id/splashScreenFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.SplashScreenFragment"
         android:label="fragment_splash_screen"
-        tools:layout="@layout/fragment_splash_screen"
-        >
+        tools:layout="@layout/fragment_splash_screen">
         <action
             android:id="@+id/action_splashScreenFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/selectedFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.SelectedFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_selected" />
+
+    <!-- ✅ AUTH FLOW -->
     <fragment
         android:id="@+id/cabinetFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.CabinetFragment"
-        android:label="fragment_cabinet"
-        tools:layout="@layout/fragment_cabinet" >
+        android:label="Şəxsi kabinet"
+        tools:layout="@layout/fragment_cabinet">
+
+        <!-- CabinetFragment → VerifyCodeFragment -->
         <action
             android:id="@+id/action_cabinetFragment_to_verifyCodeFragment"
-            app:destination="@id/verifyCodeFragment" />
+            app:destination="@id/verifyCodeFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+
+        <!-- CabinetFragment → MainCabinetFragment (auto-verify halı) -->
+        <action
+            android:id="@+id/action_cabinetFragment_to_mainCabinetFragment"
+            app:destination="@id/mainCabinetFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/cabinetFragment"
+            app:popUpToInclusive="true" />
     </fragment>
+
+    <fragment
+        android:id="@+id/verifyCodeFragment"
+        android:name="com.example.turboazapp.presentation.auth.VerifyCodeFragment"
+        android:label="Nömrənin təsdiqlənməsi"
+        tools:layout="@layout/fragment_verify_code">
+
+        <!-- VerifyCodeFragment → MainCabinetFragment -->
+        <action
+            android:id="@+id/action_verifyCodeFragment_to_mainCabinetFragment"
+            app:destination="@id/mainCabinetFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/cabinetFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mainCabinetFragment"
+        android:name="com.example.turboazapp.presentation.profile.MainCabinetFragment"
+        android:label="Şəxsi kabinet"
+        tools:layout="@layout/fragment_main_cabinet">
+
+        <!-- MainCabinetFragment → CabinetFragment (logout və ya giriş yoxdur) -->
+        <action
+            android:id="@+id/action_mainCabinetFragment_to_cabinetFragment"
+            app:destination="@id/cabinetFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/mainCabinetFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- ✅ OTHER FRAGMENTS -->
     <fragment
         android:id="@+id/otherFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.OtherFragment"
         android:label="fragment_other"
         tools:layout="@layout/fragment_other" />
+
     <fragment
         android:id="@+id/newAnnouncementFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.BrandListFragment"
         android:label="fragment_new_announcement"
-        tools:layout="@layout/fragment_brand_list"
-        >
+        tools:layout="@layout/fragment_brand_list">
         <action
             android:id="@+id/action_newAnnouncementFragment_to_newAnnouncementFragment2"
             app:destination="@id/newAnnouncementFragment2" />
     </fragment>
+
     <fragment
         android:id="@+id/newAnnouncementFragment2"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment2"
         android:label="fragment_new_announcement2"
         tools:layout="@layout/fragment_new_announcement2" />
+
     <fragment
         android:id="@+id/newAnnouncementFragment3"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment3"
         android:label="fragment_new_announcement3"
         tools:layout="@layout/fragment_new_announcement3" />
+
     <fragment
         android:id="@+id/newAnnouncementFragment4"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment4"
         android:label="fragment_new_announcement4"
         tools:layout="@layout/fragment_new_announcement4" />
+
     <fragment
         android:id="@+id/newAnnouncementFragment5"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment5"
         android:label="fragment_new_announcement5"
         tools:layout="@layout/fragment_new_announcement5" />
+
     <fragment
         android:id="@+id/newAnnouncementFragment6"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment6"
         android:label="fragment_new_announcement6"
         tools:layout="@layout/fragment_new_announcement6" />
+
     <fragment
         android:id="@+id/newAnnouncementFragment7"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment7"
         android:label="fragment_new_announcement7"
         tools:layout="@layout/fragment_new_announcement7" />
+
     <fragment
         android:id="@+id/newAnnouncementFragment8"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment8"
         android:label="fragment_new_announcement8"
         tools:layout="@layout/fragment_new_announcement8" />
+
     <fragment
         android:id="@+id/newAnnouncementFragment9"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment9"
         android:label="fragment_new_announcement9"
         tools:layout="@layout/fragment_new_announcement9" />
+
     <fragment
         android:id="@+id/addListingHostFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.AddListingHostFragment"
         android:label="fragment_add_listing_host"
         tools:layout="@layout/fragment_add_listing_host" />
+
     <fragment
         android:id="@+id/modelListFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.ModelListFragment"
         android:label="fragment_model_list"
         tools:layout="@layout/fragment_model_list" />
-    <fragment
-        android:id="@+id/verifyCodeFragment"
-        android:name="com.example.turboazapp.presentation.ui.fragment.VerifyCodeFragment"
-        android:label="fragment_verify_code"
-        tools:layout="@layout/fragment_verify_code" />
-    <fragment
-        android:id="@+id/mainCabinetFragment"
-        android:name="com.example.turboazapp.presentation.ui.fragment.MainCabinetFragment"
-        android:label="fragment_main_cabinet"
-        tools:layout="@layout/fragment_main_cabinet" />
+
 </navigation>

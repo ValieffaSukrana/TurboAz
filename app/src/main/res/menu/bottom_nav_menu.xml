@@ -3,22 +3,28 @@
 
     <item
         android:id="@+id/homeFragment"
-        android:title="@string/esas"
-        android:icon="@drawable/icons8_home"/>
+        android:icon="@drawable/icons8_home"
+        android:title="@string/esas" />
+
     <item
         android:id="@+id/selectedFragment"
-        android:title="@string/secilmishler"
-        android:icon="@drawable/heart_svgrepo_com"/>
+        android:icon="@drawable/heart_svgrepo_com"
+        android:title="@string/secilmishler" />
+
     <item
         android:id="@+id/newAnnouncementFragment"
-        android:title="Yeni Elan"
-        android:icon="@drawable/baseline_arrow_drop_down_24"/>
+        android:icon="@drawable/baseline_arrow_drop_down_24"
+        android:title="Yeni Elan" />
+
+    <!-- ✅ YALNIZ mainCabinetFragment saxla -->
     <item
-        android:id="@+id/cabinetFragment"
-        android:title="@string/kabinet"
-        android:icon="@drawable/account_circle"/>
+        android:id="@+id/mainCabinetFragment"
+        android:icon="@drawable/account_circle"
+        android:title="@string/kabinet" />
+
     <item
         android:id="@+id/otherFragment"
-        android:title="Daha Çox"
-        android:icon="@drawable/daha_cox"/>
+        android:icon="@drawable/daha_cox"
+        android:title="Daha Çox" />
+
 </menu>

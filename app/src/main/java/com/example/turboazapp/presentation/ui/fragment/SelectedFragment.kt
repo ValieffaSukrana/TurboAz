@@ -22,10 +22,10 @@ class SelectedFragment : Fragment() {
 //    private var binding: FragmentSelectedBinding? = null
 //    private lateinit var adapter: SelectedAdapter
 //
-//    override fun onResume() {
-//        super.onResume()
-//        (requireActivity() as MainActivity).setToolbarVisible(false)
-//    }
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).setToolbarVisible(false)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
