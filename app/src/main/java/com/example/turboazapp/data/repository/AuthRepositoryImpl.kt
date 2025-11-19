@@ -1,5 +1,7 @@
 package com.example.turboazapp.data.repository
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.example.turboazapp.data.mapper.toDomain
 import com.example.turboazapp.data.mapper.toDto
 import com.example.turboazapp.data.remote.FirebaseAuthDataSource
@@ -40,13 +42,30 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun getCurrentUser(): Resource<User?> {
         return try {
+            Log.d(TAG, "Getting current user...")
             val userDto = authDataSource.getCurrentUser()
-            Resource.Success(userDto?.toDomain())
+
+            if (userDto == null) {
+                Log.d(TAG, "No user logged in")
+                Resource.Success(null)
+            } else {
+                Log.d(TAG, "User found: ${userDto.id}")
+                Log.d(TAG, "User favorites: ${userDto.favorites}") // ✅ BUNU YOXLA!
+
+                // ✅ Favorites-i də götür
+                val favoritesFromFirestore = authDataSource.getFavorites(userDto.id)
+                Log.d(TAG, "Favorites from Firestore: $favoritesFromFirestore")
+
+                // UserDto-ya favorites əlavə et
+                val updatedDto = userDto.copy(favorites = favoritesFromFirestore)
+
+                Resource.Success(updatedDto.toDomain())
+            }
         } catch (e: Exception) {
+            Log.e(TAG, "Error getting user", e)
             Resource.Error(e.message ?: "İstifadəçi məlumatları alına bilmədi")
         }
     }
-
     override suspend fun updateProfile(user: User): Resource<Unit> {
         return try {
             authDataSource.updateProfile(user.toDto())
@@ -62,6 +81,15 @@ class AuthRepositoryImpl @Inject constructor(
             Resource.Success(isRegistered)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Yoxlanıla bilmədi")
+        }
+    }
+
+    override suspend fun getFavorites(userId: String): Resource<List<String>> {
+        return try {
+            val favorites = authDataSource.getFavorites(userId)
+            Resource.Success(favorites)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Sevimlilərə əlavə edilə bilmədi")
         }
     }
 }

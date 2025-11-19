@@ -19,9 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-
             <ImageView
-                android:id="@+id/cancel_button"
+                android:id="@+id/cancelButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/cancel"
@@ -42,7 +41,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <!-- Başlıq mərkəzdə -->
             <TextView
                 android:id="@+id/titleText"
                 android:layout_width="wrap_content"
@@ -56,12 +54,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/subtitleText"/>
 
-            <!-- Alt başlıq -->
             <TextView
                 android:id="@+id/subtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/_16_dan_add_m_33"
+                android:text="16-dan addım 6"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray"
                 app:layout_constraintTop_toBottomOf="@id/titleText"
@@ -73,24 +70,24 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
-        android:id="@+id/BuraxilisText"
+        android:id="@+id/MuherrikText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintStart_toStartOf="@id/recyclerViewYear"
-        android:text="Buraxış ili"
+        app:layout_constraintStart_toStartOf="@id/chipEngine"
+        android:text="Mühərrik"
         android:textSize="30sp"
         android:textStyle="bold"/>
 
-
-    <!-- Brendlərin siyahısı -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewYear"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipEngine"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:paddingTop="8dp"
         android:padding="12dp"
-        app:layout_constraintTop_toBottomOf="@id/BuraxilisText"
+        app:singleSelection="true"
+        app:selectionRequired="false"
+        app:layout_constraintTop_toBottomOf="@id/MuherrikText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

@@ -1,100 +1,99 @@
 package com.example.turboazapp.presentation.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import com.bumptech.glide.Glide
 import com.example.turboazapp.R
 import com.example.turboazapp.databinding.ItemHomeRcycleBinding
 import com.example.turboazapp.domain.model.Car
 
 class HomeAdapter(
-    private val onItemClick: (Car) -> Unit = {},  // ← ƏLAVƏ EDİLDİ
-    private val onFavoriteClick: (Car, Boolean) -> Unit = { _, _ -> }
-) : ListAdapter<Car, HomeAdapter.ViewHolder>(DiffCallback()) {
+    private val onItemClick: (Car) -> Unit,
+    private val onFavoriteClick: (Car, Boolean) -> Unit
+) : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
-    private val favoriteItems = mutableSetOf<String>()
+    companion object {
+        private const val TAG = "HomeAdapter"
+    }
 
-    inner class ViewHolder(val binding: ItemHomeRcycleBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    private var carList = mutableListOf<Car>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val binding = ItemHomeRcycleBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return ViewHolder(binding)
+        return HomeViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val car = getItem(position)
+    override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
+        holder.bind(carList[position])
+    }
 
-        holder.binding.apply {
-            // Maşın adı və məlumat
-            itemText.text = buildString {
-                append("${car.brand} ${car.model}\n")
-                append("${car.year} • ${car.mileage / 1000}k km\n")
-                append("${car.price.toInt()} ${car.currency}")
-            }
+    override fun getItemCount(): Int = carList.size
 
-            // Şəkil yüklə (Coil istifadə edərək)
-            carImageView.load(car.images.firstOrNull()) {
-                crossfade(true)
-                placeholder(R.drawable.ic_launcher_background)
-                error(R.drawable.ic_launcher_foreground)
-            }
+    fun updateList(newList: List<Car>) {
+        Log.d(TAG, "updateList called with ${newList.size} cars")
 
-            // Favorite state
-            val isFavorite = favoriteItems.contains(car.id)
-            updateFavoriteIcon(holder, isFavorite)
-
-            // ✅ KARTA CLICK - ƏLAVƏ EDİLDİ
-            root.setOnClickListener {
-                onItemClick(car)
-            }
-
-            // Favorite icon click
-            favoriteIcon.setOnClickListener {
-                val newState = !favoriteItems.contains(car.id)
-                if (newState) {
-                    favoriteItems.add(car.id)
-                } else {
-                    favoriteItems.remove(car.id)
-                }
-                updateFavoriteIcon(holder, newState)
-                onFavoriteClick(car, newState)
-            }
+        val favoriteCars = newList.filter { it.isFavorite }
+        Log.d(TAG, "Cars with isFavorite=true: ${favoriteCars.size}")
+        favoriteCars.forEach {
+            Log.d(TAG, "  - ${it.id} is favorite")
         }
-    }
 
-    private fun updateFavoriteIcon(holder: ViewHolder, isFavorite: Boolean) {
-        if (isFavorite) {
-            holder.binding.favoriteIcon.setImageResource(R.drawable.filled_heart)
-        } else {
-            holder.binding.favoriteIcon.setImageResource(R.drawable.empty_heart)
-        }
-    }
-
-    fun setFavoriteItems(favorites: Set<String>) {
-        favoriteItems.clear()
-        favoriteItems.addAll(favorites)
+        carList.clear()
+        carList.addAll(newList)
         notifyDataSetChanged()
     }
 
-    fun updateList(newList: List<Car>) {
-        submitList(newList)
+    fun setFavoriteItems(favorites: Set<String>) {
+        // DEPRECATED - artıq istifadə edilmir
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<Car>() {
-        override fun areItemsTheSame(oldItem: Car, newItem: Car): Boolean {
-            return oldItem.id == newItem.id
-        }
+    inner class HomeViewHolder(
+        private val binding: ItemHomeRcycleBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-        override fun areContentsTheSame(oldItem: Car, newItem: Car): Boolean {
-            return oldItem == newItem
+        fun bind(car: Car) {
+            // Mətn
+            binding.itemText.text = "${car.brand} ${car.model}"
+            binding.itemText.text = "${car.price} AZN"
+
+            // Şəkil
+            if (car.images.isNotEmpty()) {
+                Glide.with(binding.root.context)
+                    .load(car.images.first())
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_launcher_background)
+                    .into(binding.carImageView)
+            } else {
+                binding.carImageView.setImageResource(R.drawable.ic_launcher_background)
+            }
+
+            // ✅ HƏMIŞƏ car.isFavorite istifadə et - local state YOX
+            val isFavorite = car.isFavorite
+
+            Log.d(TAG, "Binding car ${car.id}: isFavorite=$isFavorite")
+
+            // Icon
+            binding.favoriteIcon.setImageResource(
+                if (isFavorite) R.drawable.filled_heart else R.drawable.empty_heart
+            )
+
+            // Clicks
+            binding.root.setOnClickListener {
+                onItemClick(car)
+            }
+
+            binding.favoriteIcon.setOnClickListener {
+                Log.d(TAG, "Favorite clicked for ${car.id}: current=$isFavorite")
+
+                // ✅ SADƏCƏ callback çağır - UI yeniləməsi ViewModel-dən gələcək
+                onFavoriteClick(car, isFavorite)
+            }
         }
     }
 }

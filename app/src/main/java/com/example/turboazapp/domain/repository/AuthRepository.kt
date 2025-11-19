@@ -23,4 +23,7 @@ interface AuthRepository {
 
     // İstifadəçi qeydiyyatdan keçibmi?
     suspend fun isUserRegistered(phoneNumber: String): Resource<Boolean>
+
+    // AuthRepository.kt - interface-ə əlavə et
+    suspend fun getFavorites(userId: String): Resource<List<String>>
 }

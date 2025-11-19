@@ -13,6 +13,7 @@
     <color name="darkGray">#9296a4</color>
     <color name="carGray">#c2cce5</color>
     <color name="sekilBlue">#4d89f5</color>
+    <color name="cardBackground">#FFFFFF</color>
 
     <!-- Dark Mode üçün yeni rənglər -->
     <color name="background_dark">#121212</color>

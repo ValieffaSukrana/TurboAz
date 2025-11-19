@@ -43,7 +43,11 @@
         android:id="@+id/selectedFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.SelectedFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_selected" />
+        tools:layout="@layout/fragment_selected" >
+        <action
+            android:id="@+id/action_selectedFragment_to_carDetailsFragment"
+            app:destination="@id/carDetailsFragment" />
+    </fragment>
 
     <!-- ✅ AUTH FLOW -->
     <fragment
@@ -109,62 +113,80 @@
         tools:layout="@layout/fragment_other" />
 
     <fragment
-        android:id="@+id/newAnnouncementFragment"
-        android:name="com.example.turboazapp.presentation.ui.fragment.BrandListFragment"
+        android:id="@+id/selectBrandFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.announcement.SelectBrandFragment"
         android:label="fragment_new_announcement"
-        tools:layout="@layout/fragment_brand_list">
+        tools:layout="@layout/fragment_select_brand">
         <action
-            android:id="@+id/action_newAnnouncementFragment_to_newAnnouncementFragment2"
-            app:destination="@id/newAnnouncementFragment2" />
+            android:id="@+id/action_newAnnouncementFragment_to_modelListFragment"
+            app:destination="@id/modelListFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/newAnnouncementFragment2"
-        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment2"
-        android:label="fragment_new_announcement2"
-        tools:layout="@layout/fragment_new_announcement2" />
 
     <fragment
         android:id="@+id/newAnnouncementFragment3"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment3"
         android:label="fragment_new_announcement3"
-        tools:layout="@layout/fragment_new_announcement3" />
+        tools:layout="@layout/fragment_select_year" >
+        <action
+            android:id="@+id/action_newAnnouncementFragment3_to_newAnnouncementFragment4"
+            app:destination="@id/newAnnouncementFragment4" />
+    </fragment>
 
     <fragment
         android:id="@+id/newAnnouncementFragment4"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment4"
         android:label="fragment_new_announcement4"
-        tools:layout="@layout/fragment_new_announcement4" />
+        tools:layout="@layout/fragment_select_body_type" >
+        <action
+            android:id="@+id/action_newAnnouncementFragment4_to_newAnnouncementFragment6"
+            app:destination="@id/newAnnouncementFragment6" />
+    </fragment>
 
     <fragment
         android:id="@+id/newAnnouncementFragment5"
-        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment5"
+        android:name="com.example.turboazapp.presentation.ui.fragment.announcement.SelectColorFragment"
         android:label="fragment_new_announcement5"
-        tools:layout="@layout/fragment_new_announcement5" />
+        tools:layout="@layout/fragment_select_color" >
+        <action
+            android:id="@+id/action_newAnnouncementFragment5_to_newAnnouncementFragment7"
+            app:destination="@id/newAnnouncementFragment7" />
+    </fragment>
 
     <fragment
         android:id="@+id/newAnnouncementFragment6"
-        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment6"
+        android:name="com.example.turboazapp.presentation.ui.fragment.announcement.SelectEngineFragment"
         android:label="fragment_new_announcement6"
-        tools:layout="@layout/fragment_new_announcement6" />
+        tools:layout="@layout/fragment_select_engine" >
+        <action
+            android:id="@+id/action_newAnnouncementFragment6_to_newAnnouncementFragment5"
+            app:destination="@id/newAnnouncementFragment5" />
+    </fragment>
 
     <fragment
         android:id="@+id/newAnnouncementFragment7"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment7"
         android:label="fragment_new_announcement7"
-        tools:layout="@layout/fragment_new_announcement7" />
+        tools:layout="@layout/fragment_select_market" >
+        <action
+            android:id="@+id/action_newAnnouncementFragment7_to_newAnnouncementFragment8"
+            app:destination="@id/newAnnouncementFragment8" />
+    </fragment>
 
     <fragment
         android:id="@+id/newAnnouncementFragment8"
         android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment8"
         android:label="fragment_new_announcement8"
-        tools:layout="@layout/fragment_new_announcement8" />
+        tools:layout="@layout/fragment_select_mileage" >
+        <action
+            android:id="@+id/action_newAnnouncementFragment8_to_newAnnouncementFragment9"
+            app:destination="@id/newAnnouncementFragment9" />
+    </fragment>
 
     <fragment
         android:id="@+id/newAnnouncementFragment9"
-        android:name="com.example.turboazapp.presentation.ui.fragment.NewAnnouncementFragment9"
+        android:name="com.example.turboazapp.presentation.ui.fragment.announcement.SelectImagesFragment"
         android:label="fragment_new_announcement9"
-        tools:layout="@layout/fragment_new_announcement9" />
+        tools:layout="@layout/fragment_select_image" />
 
     <fragment
         android:id="@+id/addListingHostFragment"
@@ -176,10 +198,14 @@
         android:id="@+id/modelListFragment"
         android:name="com.example.turboazapp.presentation.ui.fragment.ModelListFragment"
         android:label="fragment_model_list"
-        tools:layout="@layout/fragment_model_list" />
+        tools:layout="@layout/fragment_select_model" >
+        <action
+            android:id="@+id/action_modelListFragment_to_newAnnouncementFragment3"
+            app:destination="@id/newAnnouncementFragment3" />
+    </fragment>
     <fragment
         android:id="@+id/aboutAppFragment"
-        android:name="com.example.turboazapp.AboutAppFragment"
+        android:name="com.example.turboazapp.presentation.ui.fragment.AboutAppFragment"
         android:label="fragment_about_app"
         tools:layout="@layout/fragment_about_app" />
 

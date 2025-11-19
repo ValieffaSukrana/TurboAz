@@ -3,6 +3,7 @@ package com.example.turboazapp.presentation.ui.fragment
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.example.turboazapp.R
 import com.example.turboazapp.databinding.FragmentHomeBinding
 import com.example.turboazapp.presentation.viewmodel.HomeViewModel
 import com.example.turboazapp.presentation.ui.adapter.HomeAdapter
+import com.example.turboazapp.presentation.viewmodel.SelectedViewModel
 import com.example.turboazapp.util.Resource
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,16 +30,26 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
+    companion object {
+        private const val TAG = "HomeFragment"
+    }
+
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var adapter: HomeAdapter
     private val viewModel: HomeViewModel by viewModels()
+    private val selectedViewModel: SelectedViewModel by viewModels()
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "onResume called - refreshing cars")
+
         (requireActivity() as MainActivity).setToolbarVisible(true)
         (requireActivity() as MainActivity).setBottomNavVisible(true)
+
+        // ✅ Her defe geri donende yenile
+        viewModel.loadCars()
     }
 
     override fun onCreateView(
@@ -60,10 +72,10 @@ class HomeFragment : Fragment() {
     private fun setupRecyclerView() {
         adapter = HomeAdapter(
             onItemClick = { car ->
-                // ✅ Navigation əlavə edildi
                 navigateToCarDetails(car.id)
             },
             onFavoriteClick = { car, isFavorite ->
+                Log.d(TAG, "Favorite clicked: ${car.id}, isFavorite=$isFavorite")
                 viewModel.toggleFavorite(car, isFavorite)
             }
         )
@@ -74,13 +86,11 @@ class HomeFragment : Fragment() {
         }
     }
 
-    // ✅ YENİ FUNKSIYA
     private fun navigateToCarDetails(carId: String) {
         try {
-            // Bundle ilə car ID göndər
             val bundle = bundleOf("carId" to carId)
             findNavController().navigate(
-                R.id.action_homeFragment_to_carDetailsFragment,  // navigation action ID
+                R.id.action_homeFragment_to_carDetailsFragment,
                 bundle
             )
         } catch (e: Exception) {
@@ -99,20 +109,16 @@ class HomeFragment : Fragment() {
                 viewModel.carsState.collect { resource ->
                     when (resource) {
                         is Resource.Loading -> {
-                            // Loading göstər (opsional)
+                            Log.d(TAG, "Cars loading...")
                         }
+
                         is Resource.Success -> {
                             resource.data?.let { cars ->
+                                Log.d(TAG, "Updating adapter with ${cars.size} cars")
                                 adapter.updateList(cars)
-
-                                // Sevimliləri set et
-                                val favoriteIds = cars
-                                    .filter { it.isFavorite }
-                                    .map { it.id }
-                                    .toSet()
-                                adapter.setFavoriteItems(favoriteIds)
                             }
                         }
+
                         is Resource.Error -> {
                             Toast.makeText(
                                 requireContext(),
@@ -131,8 +137,10 @@ class HomeFragment : Fragment() {
                 viewModel.favoriteState.collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
-                            // Uğurlu
+                            Log.d(TAG, "Favorite updated successfully")
+                            selectedViewModel.loadFavoriteCars()
                         }
+
                         is Resource.Error -> {
                             Toast.makeText(
                                 requireContext(),
@@ -140,6 +148,7 @@ class HomeFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+
                         else -> {}
                     }
                 }

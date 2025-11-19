@@ -1,5 +1,6 @@
 package com.example.turboazapp.data.repository
 
+import android.util.Log
 import com.example.turboazapp.data.mapper.toDomain
 import com.example.turboazapp.data.mapper.toDto
 import com.example.turboazapp.data.remote.FirebaseAuthDataSource
@@ -13,54 +14,107 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class CarRepositoryImpl @Inject constructor(
     private val carDataSource: FirebaseCarDataSource,
     private val authDataSource: FirebaseAuthDataSource
 ) : CarRepository {
 
+    companion object {
+        private const val TAG = "CarRepositoryImpl"
+    }
+
+    // Cache üçün favoritləri yaddaşda saxla
+    private val _favoritesCache = mutableSetOf<String>()
+
     override fun getCars(): Flow<Resource<List<Car>>> = flow {
         emit(Resource.Loading())
 
-        carDataSource.getCars()
-            .map { dtoList ->
-                val currentUserId = authDataSource.getCurrentUser()?.id
-                val favorites = if (currentUserId != null) {
-                    authDataSource.getFavorites(currentUserId)
-                } else {
+        Log.d(TAG, "getCars() called")
+
+        // 1. Cars-ı gətir
+        val carsFlow = carDataSource.getCars()
+
+        carsFlow.collect { dtoList ->
+            Log.d(TAG, "Received ${dtoList.size} cars from Firebase")
+
+            // 2. Current user-i al
+            val currentUserId = authDataSource.getCurrentUser()?.id
+            Log.d(TAG, "Current user ID: $currentUserId")
+
+            // 3. Favorites-i gətir
+            val favorites = if (currentUserId != null) {
+                try {
+                    val freshFavorites = authDataSource.getFavorites(currentUserId)
+                    Log.d(TAG, "Fetched favorites from Firebase: $freshFavorites")
+
+                    // Cache-i yenilə
+                    _favoritesCache.clear()
+                    _favoritesCache.addAll(freshFavorites)
+
+                    freshFavorites
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error fetching favorites", e)
                     emptyList()
                 }
+            } else {
+                Log.d(TAG, "No user logged in, no favorites")
+                emptyList()
+            }
 
-                val cars = dtoList.map { dto ->
-                    dto.toDomain().copy(isFavorite = favorites.contains(dto.id))
-                }
-                cars
+            // 4. Cars-a favorite status əlavə et
+            val cars = dtoList.map { dto ->
+                val isFavorite = favorites.contains(dto.id)
+                Log.d(TAG, "Car ${dto.id}: isFavorite=$isFavorite")
+                dto.toDomain().copy(isFavorite = isFavorite)
             }
-            .collect { cars ->
-                emit(Resource.Success(cars))
-            }
+
+            Log.d(TAG, "Emitting ${cars.size} cars with favorites applied")
+            emit(Resource.Success(cars))
+        }
     }.catch { e ->
+        Log.e(TAG, "Error in getCars()", e)
         emit(Resource.Error(e.message ?: "Xəta baş verdi"))
     }
 
     override fun getCarById(carId: String): Flow<Resource<Car>> = flow {
         emit(Resource.Loading())
 
+        Log.d(TAG, "getCarById($carId) called")
+
         val carDto = carDataSource.getCarById(carId)
         if (carDto != null) {
             val currentUserId = authDataSource.getCurrentUser()?.id
-            val favorites = if (currentUserId != null) {
-                authDataSource.getFavorites(currentUserId)
+            Log.d(TAG, "Current user ID: $currentUserId")
+
+            val isFavorite = if (currentUserId != null) {
+                // Cache-dən yoxla, boşdursa Firebase-dən gətir
+                if (_favoritesCache.isEmpty()) {
+                    try {
+                        val favorites = authDataSource.getFavorites(currentUserId)
+                        Log.d(TAG, "Fetched favorites: $favorites")
+                        _favoritesCache.addAll(favorites)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error fetching favorites", e)
+                    }
+                }
+                val result = _favoritesCache.contains(carId)
+                Log.d(TAG, "Car $carId isFavorite: $result")
+                result
             } else {
-                emptyList()
+                false
             }
 
-            val car = carDto.toDomain().copy(isFavorite = favorites.contains(carId))
+            val car = carDto.toDomain().copy(isFavorite = isFavorite)
             emit(Resource.Success(car))
         } else {
+            Log.e(TAG, "Car $carId not found")
             emit(Resource.Error("Elan tapılmadı"))
         }
     }.catch { e ->
+        Log.e(TAG, "Error in getCarById($carId)", e)
         emit(Resource.Error(e.message ?: "Xəta baş verdi"))
     }
 
@@ -71,7 +125,14 @@ class CarRepositoryImpl @Inject constructor(
             .map { dtoList ->
                 val currentUserId = authDataSource.getCurrentUser()?.id
                 val favorites = if (currentUserId != null) {
-                    authDataSource.getFavorites(currentUserId)
+                    if (_favoritesCache.isEmpty()) {
+                        val freshFavorites = authDataSource.getFavorites(currentUserId)
+                        _favoritesCache.clear()
+                        _favoritesCache.addAll(freshFavorites)
+                        freshFavorites
+                    } else {
+                        _favoritesCache.toList()
+                    }
                 } else {
                     emptyList()
                 }
@@ -117,18 +178,34 @@ class CarRepositoryImpl @Inject constructor(
 
     override suspend fun addToFavorites(userId: String, carId: String): Resource<Unit> {
         return try {
+            Log.d(TAG, "addToFavorites: userId=$userId, carId=$carId")
+
             authDataSource.addToFavorites(userId, carId)
+
+            // ✅ Cache-i yenilə
+            _favoritesCache.add(carId)
+            Log.d(TAG, "Added to cache. Current cache: $_favoritesCache")
+
             Resource.Success(Unit)
         } catch (e: Exception) {
+            Log.e(TAG, "Error in addToFavorites", e)
             Resource.Error(e.message ?: "Sevimlilərə əlavə edilə bilmədi")
         }
     }
 
     override suspend fun removeFromFavorites(userId: String, carId: String): Resource<Unit> {
         return try {
+            Log.d(TAG, "removeFromFavorites: userId=$userId, carId=$carId")
+
             authDataSource.removeFromFavorites(userId, carId)
+
+            // ✅ Cache-dən sil
+            _favoritesCache.remove(carId)
+            Log.d(TAG, "Removed from cache. Current cache: $_favoritesCache")
+
             Resource.Success(Unit)
         } catch (e: Exception) {
+            Log.e(TAG, "Error in removeFromFavorites", e)
             Resource.Error(e.message ?: "Sevimlilərdən silinə bilmədi")
         }
     }

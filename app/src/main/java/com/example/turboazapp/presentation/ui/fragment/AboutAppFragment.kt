@@ -1,20 +1,23 @@
 package com.example.turboazapp.presentation.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.turboazapp.presentation.ui.adapter.CarsModelAdapter
-import com.example.turboazapp.databinding.FragmentModelListBinding
+import androidx.fragment.app.Fragment
+import com.example.turboazapp.R
 
-
-class ModelListFragment : Fragment() {
+class AboutAppFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).setToolbarVisible(false)
+        (requireActivity() as MainActivity).setBottomNavVisible(false)
     }
 
     override fun onCreateView(
@@ -22,11 +25,6 @@ class ModelListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return FragmentModelListBinding.inflate(inflater, container, false).root
+        return inflater.inflate(R.layout.fragment_about_app, container, false)
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    }
-
-
 }
