@@ -12,8 +12,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.example.turboazapp.AddCarActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.turboazapp.databinding.FragmentSelectImageBinding
+import com.example.turboazapp.presentation.ui.adapter.ImageAdapter
 import com.example.turboazapp.presentation.viewmodel.AddCarViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -34,7 +35,6 @@ class SelectImagesFragment : Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let { data ->
                 if (data.clipData != null) {
-                    // Çoxlu şəkil seçilib
                     val count = data.clipData!!.itemCount
                     for (i in 0 until count) {
                         val imageUri = data.clipData!!.getItemAt(i).uri
@@ -43,7 +43,6 @@ class SelectImagesFragment : Fragment() {
                         }
                     }
                 } else if (data.data != null) {
-                    // Tək şəkil seçilib
                     data.data?.let { uri ->
                         if (selectedImages.size < 20) {
                             selectedImages.add(uri)
@@ -94,36 +93,46 @@ class SelectImagesFragment : Fragment() {
 
     private fun setupRecyclerView() {
         imageAdapter = ImageAdapter(selectedImages) { position ->
-            // Şəkli sil
             selectedImages.removeAt(position)
             updateUI()
         }
 
-        binding.recyclerViewImages.apply {
-            layoutManager = GridLayoutManager(requireContext(), 3)
-            adapter = imageAdapter
-        }
+
     }
 
     private fun setupAddImageButton() {
         binding.nextButton.setOnClickListener {
-            openImagePicker()
+            if (selectedImages.size >= 3) {
+                // ✅ Log əlavə et
+                android.util.Log.d("SelectImages", "Adding ${selectedImages.size} images to ViewModel")
+
+                selectedImages.forEach { uri ->
+                    viewModel.addImage(uri.toString())
+                    android.util.Log.d("SelectImages", "Added: $uri")
+                }
+
+                // ✅ ViewModel-də neçə şəkil var yoxla
+                viewModel.selectedImages.value.let { images ->
+                    android.util.Log.d("SelectImages", "ViewModel has ${images.size} images")
+                }
+
+                (activity as? AddCarActivity)?.navigateToFragment(AddCarDetailsFragment())
+            } else {
+                openImagePicker()
+            }
         }
     }
 
     private fun setupCardButtons() {
         binding.cardFront.setOnClickListener {
-            // Ön görünüş üçün kamera
             openImagePicker()
         }
 
         binding.cardRear.setOnClickListener {
-            // Arxa görünüş üçün kamera
             openImagePicker()
         }
 
         binding.cardInterior.setOnClickListener {
-            // Salon üçün kamera
             openImagePicker()
         }
     }
@@ -138,25 +147,13 @@ class SelectImagesFragment : Fragment() {
     private fun updateUI() {
         imageAdapter.notifyDataSetChanged()
 
-        // Minimum 3 şəkil lazımdır
         val imageCount = selectedImages.size
         binding.sertText2.text = "Şəkil sayı: $imageCount/20"
 
-        // Continue button aktiv/deaktiv
-        // Növbəti fragmentə keçid - burada elanın digər məlumatlarını daxil edəcəyik
-        // Hələlik test üçün 3 şəkil yetərlidir
         if (imageCount >= 3) {
             binding.nextButton.text = "Davam et"
-            binding.nextButton.setOnClickListener {
-                // Şəkilləri ViewModel-ə əlavə et
-                selectedImages.forEach { uri ->
-                    viewModel.addImage(uri.toString())
-                }
-                // Növbəti fragmentə keç (Qiymət, təsvir və s.)
-                (activity as? AddCarActivity)?.navigateToFragment(AddCarDetailsFragment())
-            }
         } else {
-            binding.nextButton.text = "Şəkil əlavə etmək"
+            binding.nextButton.text = "Şəkil əlavə etmək (minimum 3)"
         }
     }
 

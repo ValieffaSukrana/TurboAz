@@ -35,14 +35,6 @@ object DataModule {
         return FirebaseAuthDataSource(auth, firestore)
     }
 
-    @Provides
-    @Singleton
-    fun provideCarRepository(
-        carDataSource: FirebaseCarDataSource,
-        authDataSource: FirebaseAuthDataSource
-    ): CarRepository {
-        return CarRepositoryImpl(carDataSource, authDataSource)
-    }
 
     @Provides
     @Singleton

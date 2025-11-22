@@ -61,7 +61,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun toggleFavorite(car: Car, isFavorite: Boolean) {
-        Log.d(TAG, "toggleFavorite called: carId=${car.id}, currentState=$isFavorite")
 
         viewModelScope.launch {
             val userResult = getCurrentUserUseCase()

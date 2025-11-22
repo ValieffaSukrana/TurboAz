@@ -103,6 +103,9 @@
             app:exitAnim="@android:anim/slide_out_right"
             app:popUpTo="@id/mainCabinetFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mainCabinetFragment_to_carDetailsFragment"
+            app:destination="@id/carDetailsFragment" />
     </fragment>
 
     <!-- ✅ OTHER FRAGMENTS -->
@@ -208,5 +211,15 @@
         android:name="com.example.turboazapp.presentation.ui.fragment.AboutAppFragment"
         android:label="fragment_about_app"
         tools:layout="@layout/fragment_about_app" />
+    <fragment
+        android:id="@+id/addCarDetailsFragment"
+        android:name="com.example.turboazapp.AddCarDetailsFragment"
+        android:label="fragment_add_car_details"
+        tools:layout="@layout/fragment_add_car_details" />
+    <fragment
+        android:id="@+id/addPriceAndContactFragment"
+        android:name="com.example.turboazapp.AddPriceAndContactFragment"
+        android:label="fragment_add_price_and_contact"
+        tools:layout="@layout/fragment_add_price_and_contact" />
 
 </navigation>

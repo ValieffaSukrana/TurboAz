@@ -8,6 +8,7 @@ import com.example.turboazapp.data.remote.FirebaseCarDataSource
 import com.example.turboazapp.domain.model.Car
 import com.example.turboazapp.domain.model.Filter
 import com.example.turboazapp.domain.repository.CarRepository
+import com.example.turboazapp.util.ImageUploadHelper
 import com.example.turboazapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -19,7 +20,8 @@ import javax.inject.Singleton
 @Singleton
 class CarRepositoryImpl @Inject constructor(
     private val carDataSource: FirebaseCarDataSource,
-    private val authDataSource: FirebaseAuthDataSource
+    private val authDataSource: FirebaseAuthDataSource,
+    private val imageUploadHelper: ImageUploadHelper
 ) : CarRepository {
 
     companion object {
@@ -151,9 +153,22 @@ class CarRepositoryImpl @Inject constructor(
 
     override suspend fun addCar(car: Car): Resource<String> {
         return try {
-            val carId = carDataSource.addCar(car.toDto())
+            // 1. Şəkilləri yüklə
+            val uploadedImageUrls = if (car.images.isNotEmpty()) {
+                imageUploadHelper.uploadImages(car.images)
+            } else {
+                emptyList()
+            }
+
+            // 2. Şəkil URL-ləri ilə car obyektini yenilə
+            val carWithImages = car.copy(images = uploadedImageUrls)
+
+            // 3. Firebase Firestore-a əlavə et
+            val carId = carDataSource.addCar(carWithImages.toDto())
+
             Resource.Success(carId)
         } catch (e: Exception) {
+            Log.e(TAG, "Error in addCar", e)
             Resource.Error(e.message ?: "Elan əlavə edilə bilmədi")
         }
     }
@@ -216,6 +231,24 @@ class CarRepositoryImpl @Inject constructor(
             Resource.Success(Unit)
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Baxış sayı artırıla bilmədi")
+        }
+    }
+
+    override fun getCarsByUserId(userId: String): Flow<Resource<List<Car>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val favorites = authDataSource.getFavorites(userId)
+
+            carDataSource.getCarsByUserId(userId).collect { carDtos ->
+                val cars = carDtos.map { carDto ->
+                    carDto.toDomain().copy(
+                        isFavorite = favorites.contains(carDto.id)
+                    )
+                }
+                emit(Resource.Success(cars))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Xəta"))
         }
     }
 }

@@ -44,8 +44,7 @@
             android:layout_gravity="end"
             android:layout_weight="1"
             android:layout_marginStart="120dp"
-            android:src="@drawable/settings"
-            />
+            android:src="@drawable/settings" />
     </LinearLayout>
 
     <!-- Balans paneli -->
@@ -194,6 +193,19 @@
             android:textSize="14sp"/>
     </LinearLayout>
 
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMyCars"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tabSection"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"/>
+
     <!-- Boş elan hissəsi -->
     <LinearLayout
         android:id="@+id/emptySection"
@@ -201,6 +213,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/tabSection"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

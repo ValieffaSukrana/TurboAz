@@ -3,13 +3,14 @@ package com.example.turboazapp.presentation.ui.fragment.announcement
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.turboazapp.AddCarActivity
 import com.example.turboazapp.databinding.FragmentSelectBrandBinding
 import com.example.turboazapp.presentation.ui.adapter.BrandAdapter
 import com.example.turboazapp.presentation.viewmodel.AddCarViewModel
@@ -36,11 +37,13 @@ class SelectBrandFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSelectBrandBinding.inflate(inflater, container, false)
+        Log.d("SelectBrandFragment", "onCreateView")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("SelectBrandFragment", "onViewCreated")
 
         setupToolbar()
         setupRecyclerView()
@@ -52,20 +55,47 @@ class SelectBrandFragment : Fragment() {
         binding.subtitleText.text = "16-dan addım 1"
 
         binding.backButton.setOnClickListener {
+            Log.d("SelectBrandFragment", "Back button clicked")
+            activity?.finish()
+        }
+
+        binding.backButton.setOnClickListener {
+            Log.d("SelectBrandFragment", "Cancel button clicked")
             activity?.finish()
         }
     }
 
     private fun setupRecyclerView() {
         brandAdapter = BrandAdapter(brands) { selectedBrand ->
+            Log.d("SelectBrandFragment", "🎯 Brand callback received: $selectedBrand")
+
+            Toast.makeText(
+                requireContext(),
+                "Seçildi: $selectedBrand",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            // ViewModel-ə yaz
             viewModel.selectBrand(selectedBrand)
-            (activity as? AddCarActivity)?.navigateToFragment(SelectModelFragment())
+            Log.d("SelectBrandFragment", "✅ ViewModel-ə yazıldı: $selectedBrand")
+
+            // Fragment keçidi
+            Log.d("SelectBrandFragment", "🚀 SelectModelFragment-ə keçid başlayır...")
+            val activity = activity as? AddCarActivity
+            if (activity != null) {
+                activity.navigateToFragment(SelectModelFragment())
+                Log.d("SelectBrandFragment", "✅ navigateToFragment çağırıldı")
+            } else {
+                Log.e("SelectBrandFragment", "❌ AddCarActivity tapılmadı!")
+            }
         }
 
         binding.recyclerViewBrands.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = brandAdapter
         }
+
+        Log.d("SelectBrandFragment", "RecyclerView setup: ${brandAdapter.itemCount} items")
     }
 
     private fun setupSearchView() {
@@ -80,6 +110,7 @@ class SelectBrandFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.d("SelectBrandFragment", "onDestroyView")
         _binding = null
     }
 }

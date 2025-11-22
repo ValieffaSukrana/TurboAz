@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.example.turboazapp.AddCarActivity
 import com.example.turboazapp.R
 import com.example.turboazapp.databinding.FragmentSelectEngineBinding
 import com.example.turboazapp.presentation.viewmodel.AddCarViewModel

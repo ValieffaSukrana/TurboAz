@@ -136,14 +136,19 @@ class FirebaseCarDataSource @Inject constructor(
             cars = when (filter.sortBy) {
                 com.example.turboazapp.domain.model.SortOption.DATE_DESC ->
                     cars.sortedByDescending { it.createdAt }
+
                 com.example.turboazapp.domain.model.SortOption.DATE_ASC ->
                     cars.sortedBy { it.createdAt }
+
                 com.example.turboazapp.domain.model.SortOption.PRICE_ASC ->
                     cars.sortedBy { it.price }
+
                 com.example.turboazapp.domain.model.SortOption.PRICE_DESC ->
                     cars.sortedByDescending { it.price }
+
                 com.example.turboazapp.domain.model.SortOption.MILEAGE_ASC ->
                     cars.sortedBy { it.mileage }
+
                 com.example.turboazapp.domain.model.SortOption.YEAR_DESC ->
                     cars.sortedByDescending { it.year }
             }
@@ -182,5 +187,32 @@ class FirebaseCarDataSource @Inject constructor(
             val currentCount = snapshot.getLong("view_count") ?: 0
             transaction.update(carRef, "view_count", currentCount + 1)
         }.await()
+    }
+
+    // İstifadəçinin elanlarını gətir
+    fun getCarsByUserId(userId: String): Flow<List<CarDto>> = callbackFlow {
+        android.util.Log.d("FirebaseCarDataSource", "Loading cars for userId: $userId")
+
+        val listener = carsCollection
+            .whereEqualTo("sellerId", userId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    android.util.Log.e("FirebaseCarDataSource", "Error: ${error.message}", error)
+                    close(error)
+                    return@addSnapshotListener
+                }
+
+                val cars = snapshot?.documents?.mapNotNull {
+                    it.toObject(CarDto::class.java)?.copy(id = it.id)
+                } ?: emptyList()
+
+                android.util.Log.d(
+                    "FirebaseCarDataSource",
+                    "Found ${cars.size} cars for user $userId"
+                )
+                trySend(cars)
+            }
+
+        awaitClose { listener.remove() }
     }
 }

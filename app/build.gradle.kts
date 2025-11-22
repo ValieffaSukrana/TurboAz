@@ -49,6 +49,8 @@ dependencies {
     implementation(libs.okhttp)
     implementation("io.coil-kt:coil:2.5.0")
     implementation(libs.glide)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    ksp("com.github.bumptech.glide:ksp:4.16.0")
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
     implementation("com.google.dagger:hilt-android:2.56.2")
     implementation(platform(libs.firebase.bom))

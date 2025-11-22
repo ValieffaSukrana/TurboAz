@@ -21,8 +21,10 @@
         android:theme="@style/Theme.TurboazApp"
         tools:targetApi="31">
         <activity
-            android:name=".AddCarActivity"
-            android:exported="false" />
+            android:name=".presentation.ui.fragment.announcement.AddCarActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".presentation.ui.fragment.MainActivity"
             android:exported="true">

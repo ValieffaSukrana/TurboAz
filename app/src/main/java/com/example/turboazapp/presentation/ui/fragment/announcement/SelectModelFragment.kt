@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.turboazapp.AddCarActivity
 import com.example.turboazapp.databinding.FragmentSelectModelBinding
 import com.example.turboazapp.presentation.ui.adapter.ModelAdapter
 import com.example.turboazapp.presentation.viewmodel.AddCarViewModel

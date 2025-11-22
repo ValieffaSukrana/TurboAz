@@ -1,6 +1,7 @@
 package com.example.turboazapp.presentation.ui.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.turboazapp.presentation.ui.fragment.announcement.AddCarActivity
 import com.example.turboazapp.R
 import com.example.turboazapp.databinding.ActivityMainBinding
 import com.example.turboazapp.presentation.ui.LanguageHelper
@@ -52,11 +54,10 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
 
+        // ✅ FAB düyməsi - Yeni elan əlavə et
         binding.add.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, AddListingHostFragment())
-                .addToBackStack(null)
-                .commit()
+            val intent = Intent(this, AddCarActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -176,6 +177,7 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton("Xeyr", null)
             .show()
     }
+
     override fun onResume() {
         super.onResume()
 

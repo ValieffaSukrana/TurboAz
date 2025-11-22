@@ -19,34 +19,47 @@
             android:layout_height="180dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background"
-            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent" />
+            card_view:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/favoriteIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/empty_heart"
-            android:padding="6dp"
+            android:layout_margin="8dp"
             android:clickable="true"
             android:focusable="true"
-            android:layout_margin="8dp"
-            card_view:layout_constraintTop_toTopOf="@id/carImageView"
+            android:padding="6dp"
+            android:src="@drawable/empty_heart"
             card_view:layout_constraintEnd_toEndOf="@id/carImageView"
+            card_view:layout_constraintTop_toTopOf="@id/carImageView"
             card_view:tint="@color/white" />
 
         <TextView
-            android:id="@+id/itemText"
+            android:id="@+id/carName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Nümunə"
-            android:textSize="18sp"
+            android:text="carName"
+            android:layout_marginTop="6dp"
             android:textColor="?attr/colorOnSurface"
-            card_view:layout_constraintTop_toBottomOf="@id/carImageView"
-            card_view:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="18sp"
+            card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent" />
+            card_view:layout_constraintTop_toBottomOf="@id/carImageView" />
+
+        <TextView
+            android:id="@+id/carPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="carPrice"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="18sp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@id/carName" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

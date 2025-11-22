@@ -75,7 +75,6 @@ class HomeFragment : Fragment() {
                 navigateToCarDetails(car.id)
             },
             onFavoriteClick = { car, isFavorite ->
-                Log.d(TAG, "Favorite clicked: ${car.id}, isFavorite=$isFavorite")
                 viewModel.toggleFavorite(car, isFavorite)
             }
         )

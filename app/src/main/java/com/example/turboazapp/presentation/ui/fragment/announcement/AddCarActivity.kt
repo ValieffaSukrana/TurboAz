@@ -1,4 +1,4 @@
-package com.example.turboazapp
+package com.example.turboazapp.presentation.ui.fragment.announcement
 
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -21,6 +21,7 @@ class AddCarActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (savedInstanceState == null) {
+            // İlk fragmenti yüklə - Marka seçimi
             navigateToFragment(SelectBrandFragment())
         }
     }
@@ -37,6 +38,14 @@ class AddCarActivity : AppCompatActivity() {
             supportFragmentManager.popBackStack()
         } else {
             finish()
+        }
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 1) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
         }
     }
 }

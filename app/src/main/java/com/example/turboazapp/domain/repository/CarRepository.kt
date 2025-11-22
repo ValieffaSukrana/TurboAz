@@ -32,4 +32,6 @@ interface CarRepository {
 
     // Baxış sayını artır
     suspend fun incrementViewCount(carId: String): Resource<Unit>
+
+    fun getCarsByUserId(userId: String): Flow<Resource<List<Car>>>
 }

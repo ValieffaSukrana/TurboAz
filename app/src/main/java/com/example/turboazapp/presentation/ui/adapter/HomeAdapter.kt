@@ -1,13 +1,20 @@
 package com.example.turboazapp.presentation.ui.adapter
 
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.target.Target
 import com.example.turboazapp.R
 import com.example.turboazapp.databinding.ItemHomeRcycleBinding
 import com.example.turboazapp.domain.model.Car
+
+
+
 
 class HomeAdapter(
     private val onItemClick: (Car) -> Unit,
@@ -59,26 +66,31 @@ class HomeAdapter(
 
         fun bind(car: Car) {
             // Mətn
-            binding.itemText.text = "${car.brand} ${car.model}"
-            binding.itemText.text = "${car.price} AZN"
+            binding.carName.text = "${car.brand} ${car.model}"
+            binding.carPrice.text = "${car.price} AZN"
 
             // Şəkil
             if (car.images.isNotEmpty()) {
-                Glide.with(binding.root.context)
-                    .load(car.images.first())
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .error(R.drawable.ic_launcher_background)
-                    .into(binding.carImageView)
+                val imageUrl = car.images.first()
+
+                try {
+                    Glide.with(binding.root.context)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .error(R.drawable.ic_launcher_background)
+                        .into(binding.carImageView)
+
+                } catch (e: Exception) {
+                }
             } else {
                 binding.carImageView.setImageResource(R.drawable.ic_launcher_background)
             }
 
-            // ✅ HƏMIŞƏ car.isFavorite istifadə et - local state YOX
-            val isFavorite = car.isFavorite
 
+            // Favorite icon
+            val isFavorite = car.isFavorite
             Log.d(TAG, "Binding car ${car.id}: isFavorite=$isFavorite")
 
-            // Icon
             binding.favoriteIcon.setImageResource(
                 if (isFavorite) R.drawable.filled_heart else R.drawable.empty_heart
             )
@@ -90,8 +102,6 @@ class HomeAdapter(
 
             binding.favoriteIcon.setOnClickListener {
                 Log.d(TAG, "Favorite clicked for ${car.id}: current=$isFavorite")
-
-                // ✅ SADƏCƏ callback çağır - UI yeniləməsi ViewModel-dən gələcək
                 onFavoriteClick(car, isFavorite)
             }
         }

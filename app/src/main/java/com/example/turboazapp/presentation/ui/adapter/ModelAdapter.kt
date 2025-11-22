@@ -11,14 +11,36 @@ class ModelAdapter(
 ) : RecyclerView.Adapter<ModelAdapter.ModelViewHolder>() {
 
     private var filteredModels = models.toList()
+    private var selectedPosition = -1 // ✅ Seçilmiş pozisiya
 
     inner class ModelViewHolder(private val binding: ItemModelRecycleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(model: String) {
+        fun bind(model: String, position: Int) {
             binding.brandName.text = model
+
+            // ✅ RadioButton state
+            binding.radioButton.isChecked = (position == selectedPosition)
+
+            // ✅ Root click
             binding.root.setOnClickListener {
+                val previousPosition = selectedPosition
+                selectedPosition = adapterPosition
+
+                // Əvvəlki seçimi uncheck et
+                if (previousPosition != -1) {
+                    notifyItemChanged(previousPosition)
+                }
+                // Yeni seçimi check et
+                notifyItemChanged(selectedPosition)
+
+                // Callback çağır
                 onModelClick(model)
+            }
+
+            // ✅ RadioButton click (root click ilə eyni)
+            binding.radioButton.setOnClickListener {
+                binding.root.performClick()
             }
         }
     }
@@ -33,7 +55,7 @@ class ModelAdapter(
     }
 
     override fun onBindViewHolder(holder: ModelViewHolder, position: Int) {
-        holder.bind(filteredModels[position])
+        holder.bind(filteredModels[position], position)
     }
 
     override fun getItemCount() = filteredModels.size
@@ -44,6 +66,7 @@ class ModelAdapter(
         } else {
             models.filter { it.contains(query, ignoreCase = true) }
         }
+        selectedPosition = -1 // Reset selection
         notifyDataSetChanged()
     }
 }
