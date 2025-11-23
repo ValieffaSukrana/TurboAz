@@ -2,8 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="24dp"
-    android:background="@android:color/white">
+    android:paddingTop="24dp"
+    android:background="?attr/colorSurface">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -17,7 +17,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorSurface">
 
 
             <ImageView
@@ -48,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="BMW"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/subtitleText"
@@ -79,7 +80,9 @@
         android:layout_marginHorizontal="8dp"
         android:text="Yürüş"
         android:textSize="30sp"
+        android:paddingStart="12dp"
         android:textStyle="bold"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="@id/yurusEditTxt"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
@@ -100,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
-            android:background="@drawable/yurus_background"
+            android:background="?attr/colorSurface"
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,7 +115,7 @@
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/light_gray"
         android:text="km"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/yurusEditTxt"
         app:layout_constraintTop_toBottomOf="@id/yurusEditTxt" />
@@ -125,7 +128,7 @@
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/light_gray"
         android:text="mi"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/kmBtn"
         app:layout_constraintTop_toBottomOf="@id/yurusEditTxt" />

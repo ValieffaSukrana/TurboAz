@@ -173,6 +173,15 @@ class HomeFragment : Fragment() {
                 chipBackgroundColor = ColorStateList.valueOf(
                     ContextCompat.getColor(requireContext(), R.color.white)
                 )
+                layoutParams = ViewGroup.MarginLayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    topMargin = 0 // ✅ Üst margin sıfır
+                    bottomMargin = 8
+                    marginStart = 4
+                    marginEnd = 4
+                }
             }
             binding.chipCategory.addView(chip)
         }

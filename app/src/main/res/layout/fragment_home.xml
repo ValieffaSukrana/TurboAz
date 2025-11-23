@@ -14,15 +14,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:singleSelection="true"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
+        android:paddingTop="0dp"
         android:layout_marginEnd="10dp"
         app:chipSpacingHorizontal="8dp"
-        app:chipSpacingVertical="4dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/flexboxLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0"/>
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/flexboxLayout"
@@ -31,7 +30,7 @@
         app:flexDirection="row"
         app:justifyContent="space_between"
         app:flexWrap="nowrap"
-        android:padding="8dp"
+        android:paddingHorizontal="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chipCategory" />
@@ -65,7 +64,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="110dp"
-            android:src="@drawable/bina_az"
+            android:src="@drawable/tap"
             android:layout_marginEnd="8dp" />
 
         <ImageView
@@ -73,7 +72,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="110dp"
-            android:src="@drawable/tap_az" />
+            android:src="@drawable/bina4" />
 
     </LinearLayout>
 
