@@ -96,6 +96,8 @@
         app:expandedHintEnabled="false"
         app:hintAnimationEnabled="false"
         app:hintEnabled="true"
+        app:hintTextColor="@android:color/darker_gray"
+        app:boxStrokeColor="@android:color/darker_gray"
         app:hintTextAppearance="@style/CustomHintStyle"
         app:layout_constraintTop_toBottomOf="@id/YurusText">
 

@@ -2,6 +2,8 @@ package com.example.turboazapp.presentation.ui.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -17,6 +19,13 @@ import com.example.turboazapp.R
 import com.example.turboazapp.databinding.ActivityMainBinding
 import com.example.turboazapp.presentation.ui.LanguageHelper
 import com.example.turboazapp.util.FirebaseDataSeeder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.example.turboazapp.worker.NotificationWorker
+import java.util.concurrent.TimeUnit
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -43,9 +52,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupNavigation()
-
-        // Firebase data yoxla və lazım olsa yüklə
         checkAndSeedData()
+
+        // ✅ FCM Token al
+        getFCMToken()
+
+        // ✅ 30 saniyə sonra notification schedulə et
+        scheduleNotification()
+
+        // ✅ Android 13+ üçün notification permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestNotificationPermission()
+        }
     }
 
     private fun setupNavigation() {
@@ -54,7 +72,6 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
 
-        // ✅ FAB düyməsi - Yeni elan əlavə et
         binding.add.setOnClickListener {
             val intent = Intent(this, AddCarActivity::class.java)
             startActivity(intent)
@@ -65,13 +82,10 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val hasData = dataSeeder.isDataSeeded()
-
                 if (!hasData) {
-                    // Data yoxdur, istifadəçidən soruş
                     showSeedDialog()
                 }
             } catch (e: Exception) {
-                // Xəta olsa da problem deyil, app açılsın
                 e.printStackTrace()
             }
         }
@@ -99,7 +113,6 @@ class MainActivity : AppCompatActivity() {
     private fun seedData() {
         lifecycleScope.launch {
             try {
-                // Loading göstər
                 Toast.makeText(
                     this@MainActivity,
                     "Məlumatlar yüklənir...",
@@ -131,6 +144,82 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // ✅ FCM Token al
+    private fun getFCMToken() {
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val token = task.result
+                    android.util.Log.d("FCM_TOKEN", "Device Token: $token")
+
+                    saveTokenToPreferences(token)
+                    saveTokenToFirestore(token)
+                } else {
+                    android.util.Log.e("FCM_TOKEN", "Token alınmadı", task.exception)
+                }
+            }
+    }
+
+    private fun saveTokenToPreferences(token: String) {
+        val sharedPref = getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        sharedPref.edit().putString("fcm_token", token).apply()
+    }
+
+    private fun saveTokenToFirestore(token: String) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        currentUser?.let { user ->
+            val db = FirebaseFirestore.getInstance()
+            db.collection("users").document(user.uid)
+                .update("fcmToken", token)
+                .addOnSuccessListener {
+                    android.util.Log.d("FCM", "✅ Token Firestore-a saxlanıldı")
+                }
+                .addOnFailureListener { e ->
+                    android.util.Log.e("FCM", "❌ Token saxlanılmadı: ${e.message}")
+                }
+        }
+    }
+
+    // ✅ 30 saniyə sonra notification schedulə et
+    private fun scheduleNotification() {
+        val notificationWork = OneTimeWorkRequestBuilder<NotificationWorker>()
+            .setInitialDelay(30, TimeUnit.SECONDS) // 30 saniyə gecikmə
+            .build()
+
+        WorkManager.getInstance(this).enqueue(notificationWork)
+
+        android.util.Log.d("NOTIFICATION", "🔔 Notification 30 saniyə sonra schedulə edildi")
+    }
+
+    // ✅ Android 13+ notification permission
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                    1001
+                )
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1001) {
+            if (grantResults.isNotEmpty() &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "✅ Bildirişlər aktiv edildi", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "⚠️ Bildirişlər üçün icazə verilmədi", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun applyDarkModeFromSettings() {
         val sharedPref = getSharedPreferences("app_settings", Context.MODE_PRIVATE)
         val isDarkMode = sharedPref.getBoolean("dark_mode", false)
@@ -150,43 +239,15 @@ class MainActivity : AppCompatActivity() {
         binding.add.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
-    // Bonus: Settings-dən manual seed etmək üçün
-    fun manualSeedData() {
-        showSeedDialog()
-    }
 
-    // Bonus: Bütün data-ları silmək üçün (test məqsədilə)
-    fun clearAllData() {
-        AlertDialog.Builder(this)
-            .setTitle("Bütün məlumatları sil")
-            .setMessage("Bütün avtomobil elanları silinəcək. Əminsiniz?")
-            .setPositiveButton("Bəli") { _, _ ->
-                lifecycleScope.launch {
-                    val result = dataSeeder.clearAllData()
-                    result.onSuccess { message ->
-                        Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
-                    }.onFailure { error ->
-                        Toast.makeText(
-                            this@MainActivity,
-                            "Xəta: ${error.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-            .setNegativeButton("Xeyr", null)
-            .show()
-    }
 
     override fun onResume() {
         super.onResume()
 
-        // ✅ Logout sonrası yoxlama
-        val currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+        val currentUser = FirebaseAuth.getInstance().currentUser
 
         if (currentUser == null) {
             android.util.Log.d("MainActivity", "⚠️ İstifadəçi logout edib")
-            // Restart olandan sonra SplashFragment avtomatik login səhifəsinə göndərəcək
         } else {
             android.util.Log.d("MainActivity", "✅ İstifadəçi login olub: ${currentUser.phoneNumber}")
         }

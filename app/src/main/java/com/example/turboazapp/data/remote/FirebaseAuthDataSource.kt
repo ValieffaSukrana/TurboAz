@@ -45,7 +45,7 @@ class FirebaseAuthDataSource @Inject constructor(
     }
 
     // Çıxış
-    suspend fun logout() {
+    fun logout() {
         auth.signOut()
     }
 

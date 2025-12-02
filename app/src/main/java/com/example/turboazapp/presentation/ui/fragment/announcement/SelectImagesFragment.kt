@@ -50,6 +50,15 @@ class SelectImagesFragment : Fragment() {
                     }
                 }
                 updateUI()
+
+                // ✅ Şəkil seçildikdən sonra yoxlama
+                if (selectedImages.size < 3) {
+                    android.widget.Toast.makeText(
+                        requireContext(),
+                        "Minimum 3 şəkil əlavə etməlisiniz (${selectedImages.size}/3)",
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
@@ -104,7 +113,10 @@ class SelectImagesFragment : Fragment() {
         binding.nextButton.setOnClickListener {
             if (selectedImages.size >= 3) {
                 // ✅ Log əlavə et
-                android.util.Log.d("SelectImages", "Adding ${selectedImages.size} images to ViewModel")
+                android.util.Log.d(
+                    "SelectImages",
+                    "Adding ${selectedImages.size} images to ViewModel"
+                )
 
                 selectedImages.forEach { uri ->
                     viewModel.addImage(uri.toString())
@@ -118,6 +130,7 @@ class SelectImagesFragment : Fragment() {
 
                 (activity as? AddCarActivity)?.navigateToFragment(AddCarDetailsFragment())
             } else {
+                // ✅ Əvvəlcə image picker açılır
                 openImagePicker()
             }
         }
@@ -138,9 +151,10 @@ class SelectImagesFragment : Fragment() {
     }
 
     private fun openImagePicker() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        }
+        val intent =
+            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            }
         pickImagesLauncher.launch(intent)
     }
 
