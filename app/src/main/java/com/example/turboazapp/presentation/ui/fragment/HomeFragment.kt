@@ -1,14 +1,11 @@
 package com.example.turboazapp.presentation.ui.fragment
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,11 +16,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.turboazapp.R
 import com.example.turboazapp.databinding.FragmentHomeBinding
-import com.example.turboazapp.presentation.viewmodel.HomeViewModel
+import com.example.turboazapp.presentation.ui.fragment.MainActivity
 import com.example.turboazapp.presentation.ui.adapter.HomeAdapter
+import com.example.turboazapp.presentation.viewmodel.HomeViewModel
 import com.example.turboazapp.presentation.viewmodel.SelectedViewModel
 import com.example.turboazapp.util.Resource
-import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -45,10 +42,9 @@ class HomeFragment : Fragment() {
         super.onResume()
         Log.d(TAG, "onResume called - refreshing cars")
 
-        (requireActivity() as MainActivity).setToolbarVisible(true)
-        (requireActivity() as MainActivity).setBottomNavVisible(true)
+        (requireActivity() as? MainActivity)?.setToolbarVisible(true)
+        (requireActivity() as? MainActivity)?.setBottomNavVisible(true)
 
-        // ✅ Her defe geri donende yenile
         viewModel.loadCars()
     }
 
@@ -65,8 +61,34 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        setupChips()
+        setupButtons()
         observeViewModel()
+    }
+
+    private fun setupButtons() {
+        binding.apply {
+            // Sətir 1: 3 düymə
+            btnMostViewed.setOnClickListener {
+                Toast.makeText(requireContext(), "Ən çox baxılan", Toast.LENGTH_SHORT).show()
+            }
+
+            btnCalculator.setOnClickListener {
+                Toast.makeText(requireContext(), "Kalkulyator", Toast.LENGTH_SHORT).show()
+            }
+
+            btnCatalog.setOnClickListener {
+                Toast.makeText(requireContext(), "Avtokataloq", Toast.LENGTH_SHORT).show()
+            }
+
+            // Sətir 2: 2 düymə
+            btnToday.setOnClickListener {
+                Toast.makeText(requireContext(), "Bu gün", Toast.LENGTH_SHORT).show()
+            }
+
+            btnDealers.setOnClickListener {
+                Toast.makeText(requireContext(), "Dilerlər", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -93,129 +115,39 @@ class HomeFragment : Fragment() {
                 bundle
             )
         } catch (e: Exception) {
-            Toast.makeText(
-                requireContext(),
-                "Xəta: ${e.message}",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(requireContext(), "Xəta: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun observeViewModel() {
-        // Cars state observe
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.carsState.collect { resource ->
                     when (resource) {
-                        is Resource.Loading -> {
-                            Log.d(TAG, "Cars loading...")
-                        }
-
+                        is Resource.Loading -> Log.d(TAG, "Cars loading...")
                         is Resource.Success -> {
                             resource.data?.let { cars ->
-                                Log.d(TAG, "Updating adapter with ${cars.size} cars")
                                 adapter.updateList(cars)
                             }
                         }
-
                         is Resource.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "Xəta: ${resource.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(requireContext(), "Xəta: ${resource.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
             }
         }
 
-        // Favorite state observe
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.favoriteState.collect { resource ->
-                    when (resource) {
-                        is Resource.Success -> {
-                            Log.d(TAG, "Favorite updated successfully")
-                            selectedViewModel.loadFavoriteCars()
-                        }
-
-                        is Resource.Error -> {
-                            Toast.makeText(
-                                requireContext(),
-                                resource.message,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        else -> {}
+                    if (resource is Resource.Success) {
+                        selectedViewModel.loadFavoriteCars()
+                    } else if (resource is Resource.Error) {
+                        Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-        }
-    }
-
-    private fun setupChips() {
-        val categories_home = listOf(
-            "Ən çox baxılanlar" to R.drawable.flame,
-            "Kalkulyator" to R.drawable.calculator,
-            "Avtokataloq" to R.drawable.catalog
-        )
-
-        for ((category, icon) in categories_home) {
-            val chip = Chip(requireContext()).apply {
-                text = category
-                isCheckable = true
-                textSize = 13f
-                setTextColor(Color.BLACK)
-                setChipIconResource(icon)
-                isChipIconVisible = true
-                chipBackgroundColor = ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), R.color.white)
-                )
-                layoutParams = ViewGroup.MarginLayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    topMargin = 0 // ✅ Üst margin sıfır
-                    bottomMargin = 8
-                    marginStart = 4
-                    marginEnd = 4
-                }
-            }
-            binding.chipCategory.addView(chip)
-        }
-
-        val categories2 = listOf(
-            "Bu gün:\n1781 yeni elan" to R.drawable.bmw_icon,
-            "Dilerlər" to R.drawable.lamborghini
-        )
-
-        val screenWidth = resources.displayMetrics.widthPixels
-        val margin = (16 * resources.displayMetrics.density).toInt()
-        val chipWidth = (screenWidth / categories2.size) - margin * 2
-
-        for ((category, icon) in categories2) {
-            val chip = Chip(requireContext()).apply {
-                text = category
-                isCheckable = true
-                textSize = 14f
-                setTextColor(Color.BLACK)
-                setChipIconResource(icon)
-                isChipIconVisible = true
-                chipBackgroundColor = ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), R.color.white)
-                )
-                layoutParams = ViewGroup.MarginLayoutParams(
-                    chipWidth,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    marginEnd = margin
-                    marginStart = margin
-                }
-                setPadding(16, 8, 16, 8)
-            }
-            binding.chipCategory.addView(chip)
         }
     }
 
